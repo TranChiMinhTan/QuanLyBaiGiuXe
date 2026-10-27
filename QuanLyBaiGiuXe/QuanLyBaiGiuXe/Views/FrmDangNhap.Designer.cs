@@ -45,18 +45,18 @@
             this.lblTieuDeDangNhap.AutoSize = true;
             this.lblTieuDeDangNhap.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTieuDeDangNhap.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.lblTieuDeDangNhap.Location = new System.Drawing.Point(159, 24);
+            this.lblTieuDeDangNhap.Location = new System.Drawing.Point(131, 18);
             this.lblTieuDeDangNhap.Name = "lblTieuDeDangNhap";
-            this.lblTieuDeDangNhap.Size = new System.Drawing.Size(276, 31);
+            this.lblTieuDeDangNhap.Size = new System.Drawing.Size(343, 39);
             this.lblTieuDeDangNhap.TabIndex = 0;
             this.lblTieuDeDangNhap.Text = "Đăng nhập hệ thống";
             // 
             // lblTenDN
             // 
             this.lblTenDN.AutoSize = true;
-            this.lblTenDN.Location = new System.Drawing.Point(135, 92);
+            this.lblTenDN.Location = new System.Drawing.Point(134, 86);
             this.lblTenDN.Name = "lblTenDN";
-            this.lblTenDN.Size = new System.Drawing.Size(105, 18);
+            this.lblTenDN.Size = new System.Drawing.Size(141, 24);
             this.lblTenDN.TabIndex = 1;
             this.lblTenDN.Text = "Tên đăng nhập";
             // 
@@ -64,15 +64,15 @@
             // 
             this.txtTenDangNhap.Location = new System.Drawing.Point(138, 113);
             this.txtTenDangNhap.Name = "txtTenDangNhap";
-            this.txtTenDangNhap.Size = new System.Drawing.Size(319, 24);
+            this.txtTenDangNhap.Size = new System.Drawing.Size(319, 29);
             this.txtTenDangNhap.TabIndex = 2;
             // 
             // lblMatKhau
             // 
             this.lblMatKhau.AutoSize = true;
-            this.lblMatKhau.Location = new System.Drawing.Point(138, 159);
+            this.lblMatKhau.Location = new System.Drawing.Point(134, 153);
             this.lblMatKhau.Name = "lblMatKhau";
-            this.lblMatKhau.Size = new System.Drawing.Size(69, 18);
+            this.lblMatKhau.Size = new System.Drawing.Size(86, 24);
             this.lblMatKhau.TabIndex = 3;
             this.lblMatKhau.Text = "Mật khẩu";
             // 
@@ -80,7 +80,7 @@
             // 
             this.txtMatKhau.Location = new System.Drawing.Point(138, 180);
             this.txtMatKhau.Name = "txtMatKhau";
-            this.txtMatKhau.Size = new System.Drawing.Size(319, 24);
+            this.txtMatKhau.Size = new System.Drawing.Size(319, 29);
             this.txtMatKhau.TabIndex = 4;
             // 
             // btnDangNhap
@@ -105,7 +105,7 @@
             // 
             // frmDangNhap
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ClientSize = new System.Drawing.Size(600, 369);

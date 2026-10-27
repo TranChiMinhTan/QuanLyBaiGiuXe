@@ -29,19 +29,19 @@
         private void InitializeComponent()
         {
             this.grbThongTintheXe = new System.Windows.Forms.GroupBox();
-            this.lblMaThe = new System.Windows.Forms.Label();
-            this.txtMaThe = new System.Windows.Forms.TextBox();
-            this.lblLoaiThe = new System.Windows.Forms.Label();
-            this.cboLoaiThe = new System.Windows.Forms.ComboBox();
-            this.cboTrangThai = new System.Windows.Forms.ComboBox();
-            this.lblTrangThai = new System.Windows.Forms.Label();
-            this.lblNgayCap = new System.Windows.Forms.Label();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
-            this.btnThem = new System.Windows.Forms.Button();
-            this.btnSua = new System.Windows.Forms.Button();
-            this.btnXoa = new System.Windows.Forms.Button();
-            this.btnLamMoi = new System.Windows.Forms.Button();
             this.txtTimKiem = new System.Windows.Forms.TextBox();
+            this.btnLamMoi = new System.Windows.Forms.Button();
+            this.btnXoa = new System.Windows.Forms.Button();
+            this.btnSua = new System.Windows.Forms.Button();
+            this.btnThem = new System.Windows.Forms.Button();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.lblNgayCap = new System.Windows.Forms.Label();
+            this.lblTrangThai = new System.Windows.Forms.Label();
+            this.cboTrangThai = new System.Windows.Forms.ComboBox();
+            this.cboLoaiThe = new System.Windows.Forms.ComboBox();
+            this.lblLoaiThe = new System.Windows.Forms.Label();
+            this.txtMaThe = new System.Windows.Forms.TextBox();
+            this.lblMaThe = new System.Windows.Forms.Label();
             this.dgvTheXe = new System.Windows.Forms.DataGridView();
             this.grbThongTintheXe.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTheXe)).BeginInit();
@@ -65,123 +65,138 @@
             this.grbThongTintheXe.Dock = System.Windows.Forms.DockStyle.Top;
             this.grbThongTintheXe.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grbThongTintheXe.Location = new System.Drawing.Point(0, 0);
+            this.grbThongTintheXe.Margin = new System.Windows.Forms.Padding(4);
             this.grbThongTintheXe.Name = "grbThongTintheXe";
-            this.grbThongTintheXe.Size = new System.Drawing.Size(1000, 156);
+            this.grbThongTintheXe.Padding = new System.Windows.Forms.Padding(4);
+            this.grbThongTintheXe.Size = new System.Drawing.Size(1300, 192);
             this.grbThongTintheXe.TabIndex = 0;
             this.grbThongTintheXe.TabStop = false;
             this.grbThongTintheXe.Text = "Thông tin thẻ xe";
             // 
-            // lblMaThe
+            // txtTimKiem
             // 
-            this.lblMaThe.AutoSize = true;
-            this.lblMaThe.Location = new System.Drawing.Point(21, 31);
-            this.lblMaThe.Name = "lblMaThe";
-            this.lblMaThe.Size = new System.Drawing.Size(58, 18);
-            this.lblMaThe.TabIndex = 0;
-            this.lblMaThe.Text = "Mã Thẻ";
+            this.txtTimKiem.Location = new System.Drawing.Point(964, 128);
+            this.txtTimKiem.Margin = new System.Windows.Forms.Padding(4);
+            this.txtTimKiem.Name = "txtTimKiem";
+            this.txtTimKiem.Size = new System.Drawing.Size(308, 29);
+            this.txtTimKiem.TabIndex = 12;
             // 
-            // txtMaThe
+            // btnLamMoi
             // 
-            this.txtMaThe.Location = new System.Drawing.Point(24, 52);
-            this.txtMaThe.Name = "txtMaThe";
-            this.txtMaThe.Size = new System.Drawing.Size(143, 24);
-            this.txtMaThe.TabIndex = 1;
+            this.btnLamMoi.Location = new System.Drawing.Point(508, 124);
+            this.btnLamMoi.Margin = new System.Windows.Forms.Padding(4);
+            this.btnLamMoi.Name = "btnLamMoi";
+            this.btnLamMoi.Size = new System.Drawing.Size(123, 39);
+            this.btnLamMoi.TabIndex = 11;
+            this.btnLamMoi.Text = "Làm mới";
+            this.btnLamMoi.UseVisualStyleBackColor = true;
             // 
-            // lblLoaiThe
+            // btnXoa
             // 
-            this.lblLoaiThe.AutoSize = true;
-            this.lblLoaiThe.Location = new System.Drawing.Point(192, 31);
-            this.lblLoaiThe.Name = "lblLoaiThe";
-            this.lblLoaiThe.Size = new System.Drawing.Size(60, 18);
-            this.lblLoaiThe.TabIndex = 2;
-            this.lblLoaiThe.Text = "Loại thẻ";
+            this.btnXoa.Location = new System.Drawing.Point(349, 124);
+            this.btnXoa.Margin = new System.Windows.Forms.Padding(4);
+            this.btnXoa.Name = "btnXoa";
+            this.btnXoa.Size = new System.Drawing.Size(123, 39);
+            this.btnXoa.TabIndex = 10;
+            this.btnXoa.Text = "Xóa";
+            this.btnXoa.UseVisualStyleBackColor = true;
             // 
-            // cboLoaiThe
+            // btnSua
             // 
-            this.cboLoaiThe.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboLoaiThe.FormattingEnabled = true;
-            this.cboLoaiThe.Location = new System.Drawing.Point(195, 51);
-            this.cboLoaiThe.Name = "cboLoaiThe";
-            this.cboLoaiThe.Size = new System.Drawing.Size(181, 26);
-            this.cboLoaiThe.TabIndex = 3;
+            this.btnSua.Location = new System.Drawing.Point(191, 124);
+            this.btnSua.Margin = new System.Windows.Forms.Padding(4);
+            this.btnSua.Name = "btnSua";
+            this.btnSua.Size = new System.Drawing.Size(123, 39);
+            this.btnSua.TabIndex = 9;
+            this.btnSua.Text = "Sửa ";
+            this.btnSua.UseVisualStyleBackColor = true;
+            // 
+            // btnThem
+            // 
+            this.btnThem.Location = new System.Drawing.Point(32, 124);
+            this.btnThem.Margin = new System.Windows.Forms.Padding(4);
+            this.btnThem.Name = "btnThem";
+            this.btnThem.Size = new System.Drawing.Size(123, 39);
+            this.btnThem.TabIndex = 8;
+            this.btnThem.Text = "Thêm";
+            this.btnThem.UseVisualStyleBackColor = true;
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dateTimePicker1.Location = new System.Drawing.Point(817, 64);
+            this.dateTimePicker1.Margin = new System.Windows.Forms.Padding(4);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(241, 29);
+            this.dateTimePicker1.TabIndex = 7;
+            // 
+            // lblNgayCap
+            // 
+            this.lblNgayCap.AutoSize = true;
+            this.lblNgayCap.Location = new System.Drawing.Point(813, 38);
+            this.lblNgayCap.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblNgayCap.Name = "lblNgayCap";
+            this.lblNgayCap.Size = new System.Drawing.Size(90, 24);
+            this.lblNgayCap.TabIndex = 6;
+            this.lblNgayCap.Text = "Ngày cấp";
+            // 
+            // lblTrangThai
+            // 
+            this.lblTrangThai.AutoSize = true;
+            this.lblTrangThai.Location = new System.Drawing.Point(535, 38);
+            this.lblTrangThai.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTrangThai.Name = "lblTrangThai";
+            this.lblTrangThai.Size = new System.Drawing.Size(94, 24);
+            this.lblTrangThai.TabIndex = 5;
+            this.lblTrangThai.Text = "Trạng thái";
             // 
             // cboTrangThai
             // 
             this.cboTrangThai.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboTrangThai.FormattingEnabled = true;
-            this.cboTrangThai.Location = new System.Drawing.Point(404, 51);
+            this.cboTrangThai.Location = new System.Drawing.Point(539, 63);
+            this.cboTrangThai.Margin = new System.Windows.Forms.Padding(4);
             this.cboTrangThai.Name = "cboTrangThai";
-            this.cboTrangThai.Size = new System.Drawing.Size(181, 26);
+            this.cboTrangThai.Size = new System.Drawing.Size(240, 32);
             this.cboTrangThai.TabIndex = 4;
             // 
-            // lblTrangThai
+            // cboLoaiThe
             // 
-            this.lblTrangThai.AutoSize = true;
-            this.lblTrangThai.Location = new System.Drawing.Point(401, 31);
-            this.lblTrangThai.Name = "lblTrangThai";
-            this.lblTrangThai.Size = new System.Drawing.Size(73, 18);
-            this.lblTrangThai.TabIndex = 5;
-            this.lblTrangThai.Text = "Trạng thái";
+            this.cboLoaiThe.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboLoaiThe.FormattingEnabled = true;
+            this.cboLoaiThe.Location = new System.Drawing.Point(260, 63);
+            this.cboLoaiThe.Margin = new System.Windows.Forms.Padding(4);
+            this.cboLoaiThe.Name = "cboLoaiThe";
+            this.cboLoaiThe.Size = new System.Drawing.Size(240, 32);
+            this.cboLoaiThe.TabIndex = 3;
             // 
-            // lblNgayCap
+            // lblLoaiThe
             // 
-            this.lblNgayCap.AutoSize = true;
-            this.lblNgayCap.Location = new System.Drawing.Point(610, 31);
-            this.lblNgayCap.Name = "lblNgayCap";
-            this.lblNgayCap.Size = new System.Drawing.Size(70, 18);
-            this.lblNgayCap.TabIndex = 6;
-            this.lblNgayCap.Text = "Ngày cấp";
+            this.lblLoaiThe.AutoSize = true;
+            this.lblLoaiThe.Location = new System.Drawing.Point(256, 38);
+            this.lblLoaiThe.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblLoaiThe.Name = "lblLoaiThe";
+            this.lblLoaiThe.Size = new System.Drawing.Size(76, 24);
+            this.lblLoaiThe.TabIndex = 2;
+            this.lblLoaiThe.Text = "Loại thẻ";
             // 
-            // dateTimePicker1
+            // txtMaThe
             // 
-            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dateTimePicker1.Location = new System.Drawing.Point(613, 52);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(182, 24);
-            this.dateTimePicker1.TabIndex = 7;
+            this.txtMaThe.Location = new System.Drawing.Point(32, 64);
+            this.txtMaThe.Margin = new System.Windows.Forms.Padding(4);
+            this.txtMaThe.Name = "txtMaThe";
+            this.txtMaThe.Size = new System.Drawing.Size(189, 29);
+            this.txtMaThe.TabIndex = 1;
             // 
-            // btnThem
+            // lblMaThe
             // 
-            this.btnThem.Location = new System.Drawing.Point(24, 101);
-            this.btnThem.Name = "btnThem";
-            this.btnThem.Size = new System.Drawing.Size(92, 32);
-            this.btnThem.TabIndex = 8;
-            this.btnThem.Text = "Thêm";
-            this.btnThem.UseVisualStyleBackColor = true;
-            // 
-            // btnSua
-            // 
-            this.btnSua.Location = new System.Drawing.Point(143, 101);
-            this.btnSua.Name = "btnSua";
-            this.btnSua.Size = new System.Drawing.Size(92, 32);
-            this.btnSua.TabIndex = 9;
-            this.btnSua.Text = "Sửa ";
-            this.btnSua.UseVisualStyleBackColor = true;
-            // 
-            // btnXoa
-            // 
-            this.btnXoa.Location = new System.Drawing.Point(262, 101);
-            this.btnXoa.Name = "btnXoa";
-            this.btnXoa.Size = new System.Drawing.Size(92, 32);
-            this.btnXoa.TabIndex = 10;
-            this.btnXoa.Text = "Xóa";
-            this.btnXoa.UseVisualStyleBackColor = true;
-            // 
-            // btnLamMoi
-            // 
-            this.btnLamMoi.Location = new System.Drawing.Point(381, 101);
-            this.btnLamMoi.Name = "btnLamMoi";
-            this.btnLamMoi.Size = new System.Drawing.Size(92, 32);
-            this.btnLamMoi.TabIndex = 11;
-            this.btnLamMoi.Text = "Làm mới";
-            this.btnLamMoi.UseVisualStyleBackColor = true;
-            // 
-            // txtTimKiem
-            // 
-            this.txtTimKiem.Location = new System.Drawing.Point(727, 105);
-            this.txtTimKiem.Name = "txtTimKiem";
-            this.txtTimKiem.Size = new System.Drawing.Size(232, 24);
-            this.txtTimKiem.TabIndex = 12;
+            this.lblMaThe.AutoSize = true;
+            this.lblMaThe.Location = new System.Drawing.Point(28, 38);
+            this.lblMaThe.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblMaThe.Name = "lblMaThe";
+            this.lblMaThe.Size = new System.Drawing.Size(75, 24);
+            this.lblMaThe.TabIndex = 0;
+            this.lblMaThe.Text = "Mã Thẻ";
             // 
             // dgvTheXe
             // 
@@ -190,21 +205,24 @@
             this.dgvTheXe.BackgroundColor = System.Drawing.SystemColors.ButtonFace;
             this.dgvTheXe.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvTheXe.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvTheXe.Location = new System.Drawing.Point(0, 156);
+            this.dgvTheXe.Location = new System.Drawing.Point(0, 192);
+            this.dgvTheXe.Margin = new System.Windows.Forms.Padding(4);
             this.dgvTheXe.Name = "dgvTheXe";
             this.dgvTheXe.RowHeadersVisible = false;
-            this.dgvTheXe.Size = new System.Drawing.Size(1000, 404);
+            this.dgvTheXe.RowHeadersWidth = 51;
+            this.dgvTheXe.Size = new System.Drawing.Size(1300, 508);
             this.dgvTheXe.TabIndex = 1;
             // 
             // ucTheXe
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.Controls.Add(this.dgvTheXe);
             this.Controls.Add(this.grbThongTintheXe);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "ucTheXe";
-            this.Size = new System.Drawing.Size(1000, 560);
+            this.Size = new System.Drawing.Size(1300, 700);
             this.grbThongTintheXe.ResumeLayout(false);
             this.grbThongTintheXe.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTheXe)).EndInit();

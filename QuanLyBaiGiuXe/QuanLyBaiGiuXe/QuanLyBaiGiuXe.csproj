@@ -37,6 +37,7 @@
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -80,6 +81,12 @@
     <Compile Include="Views\ucKhachHang.Designer.cs">
       <DependentUpon>ucKhachHang.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\ucLoaiXe.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\ucLoaiXe.Designer.cs">
+      <DependentUpon>ucLoaiXe.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\ucTheXe.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -122,8 +129,14 @@
     <EmbeddedResource Include="Views\ucBangGia.resx">
       <DependentUpon>ucBangGia.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\ucBaoCao.resx">
+      <DependentUpon>ucBaoCao.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\ucKhachHang.resx">
       <DependentUpon>ucKhachHang.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ucLoaiXe.resx">
+      <DependentUpon>ucLoaiXe.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ucTheXe.resx">
       <DependentUpon>ucTheXe.cs</DependentUpon>
