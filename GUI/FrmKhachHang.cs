@@ -1,5 +1,7 @@
 using BLL;
 using DTO;
+using System;
+using System.Windows.Forms;
 
 namespace GUI
 {
@@ -12,104 +14,57 @@ namespace GUI
             InitializeComponent();
         }
 
-        private void FrmKhachHang_Load(object sender, EventArgs e)
+        private void FrmKhachHang_Load(
+            object sender,
+            EventArgs e)
         {
             LoadData();
         }
 
         private void LoadData()
         {
-            dgvKhachHang.DataSource = bll.GetAll();
-        }
-
-        private void btnThem_Click(object sender, EventArgs e)
-        {
             try
             {
-                KhachHangDTO kh = new KhachHangDTO()
-                {
-                    HoTen = txtHoTen.Text,
-                    SoDienThoai = txtSDT.Text,
-                    DiaChi = txtDiaChi.Text
-                };
-
-                bll.Them(kh);
-
-                MessageBox.Show("Thêm thành công");
-
-                LoadData();
+                dgvKhachHang.DataSource =
+                    bll.GetAll();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(
+                    ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
-        private void btnSua_Click(object sender, EventArgs e)
+        private void btnThem_Click(
+            object sender,
+            EventArgs e)
         {
             try
-        {
-            KhachHangDTO kh = new KhachHangDTO()
             {
-                MaKH = int.Parse(txtMaKH.Text),
-                HoTen = txtHoTen.Text,
-                SoDienThoai = txtSDT.Text,
-                DiaChi = txtDiaChi.Text
-            };
-         }
-             catch(Exception ex)
-    {
-       MessageBox.Show(ex.Message);
-    }
-}
-            bll.Sua(kh);
+                KhachHangDTO kh =
+                    new KhachHangDTO()
+                    {
+                        HoTen = txtHoTen.Text.Trim(),
+                        SoDienThoai = txtSDT.Text.Trim(),
+                        DiaChi = txtDiaChi.Text.Trim()
+                    };
 
-            MessageBox.Show("Cập nhật thành công");
+                bll.Them(kh);
 
-            LoadData();
-        }
-
-        private void btnXoa_Click(object sender, EventArgs e)
-        {
-            try
-        {
-            if (MessageBox.Show(
-                "Xóa khách hàng?",
-                "Thông báo",
-                MessageBoxButtons.YesNo)
-                == DialogResult.Yes)
-            {
-                bll.Xoa(int.Parse(txtMaKH.Text));
+                MessageBox.Show(
+                    "Thêm thành công");
 
                 LoadData();
+
+                LamMoi();
             }
-        }
-            catch(Exception ex)
-    {
-       MessageBox.Show(ex.Message);
-    }
-}
-
-        private void dgvKhachHang_CellClick(
-            object sender,
-            DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0) return;
-
-            DataGridViewRow row =
-                dgvKhachHang.Rows[e.RowIndex];
-
-            txtMaKH.Text =
-                row.Cells["MaKH"].Value.ToString();
-
-            txtHoTen.Text =
-                row.Cells["HoTen"].Value.ToString();
-
-            txtSDT.Text =
-                row.Cells["SoDienThoai"].Value.ToString();
-
-            txtDiaChi.Text =
-                row.Cells["DiaChi"].Value.ToString();
-        }
-    }
-}
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
