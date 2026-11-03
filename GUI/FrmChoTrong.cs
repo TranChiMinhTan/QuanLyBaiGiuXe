@@ -1,4 +1,6 @@
 using BLL;
+using System;
+using System.Windows.Forms;
 
 namespace GUI
 {
@@ -16,16 +18,28 @@ namespace GUI
             object sender,
             EventArgs e)
         {
-            dgvChoTrong.DataSource =
-                bll.LayBaoCao();
+            TaiDuLieu();
         }
 
         private void btnTaiLai_Click(
             object sender,
             EventArgs e)
         {
-            dgvChoTrong.DataSource =
-                bll.LayBaoCao();
+            TaiDuLieu();
+        }
+
+        private void TaiDuLieu()
+        {
+            try
+            {
+                dgvChoTrong.DataSource =
+                    bll.LayBaoCao();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message);
+            }
         }
     }
 }
