@@ -1,7 +1,12 @@
 public class VeThangBLL
 {
-    VeThangDAL dal =
+    private VeThangDAL dal =
         new VeThangDAL();
+
+    public DataTable GetAll()
+    {
+        return dal.GetAll();
+    }
 
     public bool DangKy(VeThangDTO vt)
     {
@@ -13,11 +18,19 @@ public class VeThangBLL
         DateTime ngayMoi =
             DateTime.Now.AddMonths(1);
 
-        return dal.GiaHan(maVe, ngayMoi);
+        return dal.GiaHan(
+            maVe,
+            ngayMoi);
     }
 
     public bool Huy(int maVe)
     {
         return dal.Huy(maVe);
+    }
+
+    public bool KiemTraVeThang(string soThe)
+    {
+        return dal.KiemTraVeThang(
+            soThe);
     }
 }
