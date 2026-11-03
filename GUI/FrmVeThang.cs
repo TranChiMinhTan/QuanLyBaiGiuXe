@@ -1,5 +1,3 @@
-using System;
-using System.Windows.Forms;
 using BLL;
 using DTO;
 
@@ -7,105 +5,125 @@ namespace GUI
 {
     public partial class FrmVeThang : Form
     {
-        private VeThangBLL bll =
-            new VeThangBLL();
-
-        ComboBox cboKhachHang =
-            new ComboBox();
-
-        ComboBox cboSoThe =
-            new ComboBox();
-
-        TextBox txtMaVe =
-            new TextBox();
-
-        TextBox txtSoThe =
-            new TextBox();
-
-        Button btnDangKy =
-            new Button();
-
-        Button btnGiaHan =
-            new Button();
-
-        Button btnHuy =
-            new Button();
-
-        Button btnKiemTra =
-            new Button();
-
-        DataGridView dgvVeThang =
-            new DataGridView();
+        private VeThangBLL bll = new VeThangBLL();
 
         public FrmVeThang()
         {
-            InitializeComponentCustom();
+            InitializeComponent();
         }
 
-        private void InitializeComponentCustom()
-        {
-            this.Text = "Quản lý vé tháng";
-            this.Size = new Size(900, 600);
-
-            btnDangKy.Text = "Đăng ký";
-            btnDangKy.Location =
-                new Point(20, 20);
-
-            btnDangKy.Click +=
-                btnDangKy_Click;
-
-            btnGiaHan.Text =
-                "Gia hạn";
-
-            btnGiaHan.Location =
-                new Point(120, 20);
-
-            btnGiaHan.Click +=
-                btnGiaHan_Click;
-
-            btnHuy.Text =
-                "Hủy vé";
-
-            btnHuy.Location =
-                new Point(220, 20);
-
-            btnHuy.Click +=
-                btnHuyVe_Click;
-
-            btnKiemTra.Text =
-                "Kiểm tra";
-
-            btnKiemTra.Location =
-                new Point(320, 20);
-
-            btnKiemTra.Click +=
-                btnKiemTra_Click;
-
-            dgvVeThang.Location =
-                new Point(20, 100);
-
-            dgvVeThang.Size =
-                new Size(820, 400);
-
-            Controls.Add(btnDangKy);
-            Controls.Add(btnGiaHan);
-            Controls.Add(btnHuy);
-            Controls.Add(btnKiemTra);
-            Controls.Add(dgvVeThang);
-
-            Load += FrmVeThang_Load;
-        }
-
-        private void FrmVeThang_Load(
-            object sender, EventArgs e)
+        private void FrmVeThang_Load(object sender, EventArgs e)
         {
             LoadData();
         }
 
         private void LoadData()
         {
-            dgvVeThang.DataSource =
-                bll.GetAll();
+            try
+            {
+                dgvVeThang.DataSource = bll.GetAll();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnDangKy_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                VeThangDTO vt = new VeThangDTO();
+
+                vt.MaKH = int.Parse(txtMaKH.Text);
+                vt.SoThe = txtSoThe.Text;
+                vt.NgayDangKy = DateTime.Now;
+                vt.NgayHetHan = DateTime.Now.AddMonths(1);
+                vt.TrangThai = true;
+
+                if (bll.DangKy(vt))
+                {
+                    MessageBox.Show("Đăng ký thành công");
+                    LoadData();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnGiaHan_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int maVe = int.Parse(txtMaVe.Text);
+
+                if (bll.GiaHan(maVe))
+                {
+                    MessageBox.Show("Gia hạn thành công");
+                    LoadData();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnHuyVe_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int maVe = int.Parse(txtMaVe.Text);
+
+                if (bll.Huy(maVe))
+                {
+                    MessageBox.Show("Đã hủy vé");
+                    LoadData();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnKiemTra_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                bool ketQua =
+                    bll.KiemTraVeThang(txtSoThe.Text);
+
+                MessageBox.Show(
+                    ketQua
+                    ? "Vé còn hiệu lực"
+                    : "Vé hết hạn");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void dgvVeThang_CellClick(
+            object sender,
+            DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            DataGridViewRow row =
+                dgvVeThang.Rows[e.RowIndex];
+
+            txtMaVe.Text =
+                row.Cells["MaVe"].Value.ToString();
+
+            txtMaKH.Text =
+                row.Cells["MaKH"].Value.ToString();
+
+            txtSoThe.Text =
+                row.Cells["SoThe"].Value.ToString();
         }
     }
 }
