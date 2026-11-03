@@ -47,6 +47,8 @@ namespace GUI
 
         private void btnSua_Click(object sender, EventArgs e)
         {
+            try
+        {
             KhachHangDTO kh = new KhachHangDTO()
             {
                 MaKH = int.Parse(txtMaKH.Text),
@@ -54,7 +56,12 @@ namespace GUI
                 SoDienThoai = txtSDT.Text,
                 DiaChi = txtDiaChi.Text
             };
-
+         }
+             catch(Exception ex)
+    {
+       MessageBox.Show(ex.Message);
+    }
+}
             bll.Sua(kh);
 
             MessageBox.Show("Cập nhật thành công");
@@ -63,6 +70,8 @@ namespace GUI
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
+        {
+            try
         {
             if (MessageBox.Show(
                 "Xóa khách hàng?",
@@ -75,6 +84,11 @@ namespace GUI
                 LoadData();
             }
         }
+            catch(Exception ex)
+    {
+       MessageBox.Show(ex.Message);
+    }
+}
 
         private void dgvKhachHang_CellClick(
             object sender,
