@@ -17,8 +17,21 @@ namespace GUI
         private Button btnThem;
         private Button btnSua;
         private Button btnXoa;
+        private Button btnLamMoi;
 
         private DataGridView dgvKhachHang;
+
+        protected override void Dispose(
+            bool disposing)
+        {
+            if (disposing &&
+                (components != null))
+            {
+                components.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
 
         private void InitializeComponent()
         {
@@ -35,8 +48,13 @@ namespace GUI
             btnThem = new Button();
             btnSua = new Button();
             btnXoa = new Button();
+            btnLamMoi = new Button();
 
-            dgvKhachHang = new DataGridView();
+            dgvKhachHang =
+                new DataGridView();
+
+            ((System.ComponentModel.ISupportInitialize)
+                dgvKhachHang).BeginInit();
 
             SuspendLayout();
 
@@ -44,6 +62,7 @@ namespace GUI
             lblMaKH.Location = new Point(20, 20);
 
             txtMaKH.Location = new Point(120, 20);
+            txtMaKH.ReadOnly = true;
 
             lblHoTen.Text = "Họ tên";
             lblHoTen.Location = new Point(20, 60);
@@ -61,41 +80,68 @@ namespace GUI
             txtDiaChi.Location = new Point(120, 140);
 
             btnThem.Text = "Thêm";
-            btnThem.Location = new Point(20, 190);
+            btnThem.Location =
+                new Point(20, 190);
 
             btnSua.Text = "Sửa";
-            btnSua.Location = new Point(120, 190);
+            btnSua.Location =
+                new Point(120, 190);
 
             btnXoa.Text = "Xóa";
-            btnXoa.Location = new Point(220, 190);
+            btnXoa.Location =
+                new Point(220, 190);
+
+            btnLamMoi.Text = "Làm mới";
+            btnLamMoi.Location =
+                new Point(320, 190);
 
             dgvKhachHang.Location =
                 new Point(20, 250);
 
             dgvKhachHang.Size =
-                new Size(750, 250);
+                new Size(760, 250);
 
-            Controls.AddRange(new Control[]
-            {
-                lblMaKH,lblHoTen,lblSDT,lblDiaChi,
-                txtMaKH,txtHoTen,txtSDT,txtDiaChi,
-                btnThem,btnSua,btnXoa,
-                dgvKhachHang
-            });
+            dgvKhachHang.AutoSizeColumnsMode =
+                DataGridViewAutoSizeColumnsMode.Fill;
 
             btnThem.Click += btnThem_Click;
             btnSua.Click += btnSua_Click;
             btnXoa.Click += btnXoa_Click;
+            btnLamMoi.Click += btnLamMoi_Click;
 
             dgvKhachHang.CellClick +=
                 dgvKhachHang_CellClick;
 
+            Controls.Add(lblMaKH);
+            Controls.Add(lblHoTen);
+            Controls.Add(lblSDT);
+            Controls.Add(lblDiaChi);
+
+            Controls.Add(txtMaKH);
+            Controls.Add(txtHoTen);
+            Controls.Add(txtSDT);
+            Controls.Add(txtDiaChi);
+
+            Controls.Add(btnThem);
+            Controls.Add(btnSua);
+            Controls.Add(btnXoa);
+            Controls.Add(btnLamMoi);
+
+            Controls.Add(dgvKhachHang);
+
             Load += FrmKhachHang_Load;
 
-            Text = "Quản lý khách hàng";
-            Size = new Size(820, 600);
+            ClientSize =
+                new Size(820, 550);
+
+            Text =
+                "Quản lý khách hàng";
+
+            ((System.ComponentModel.ISupportInitialize)
+                dgvKhachHang).EndInit();
 
             ResumeLayout(false);
+            PerformLayout();
         }
     }
 }
