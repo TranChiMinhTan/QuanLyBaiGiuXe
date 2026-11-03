@@ -1,36 +1,37 @@
-public class VeThangBLL
+using DAL;
+using DTO;
+using System.Data;
+
+namespace BLL
 {
-    private VeThangDAL dal =
-        new VeThangDAL();
-
-    public DataTable GetAll()
+    public class VeThangBLL
     {
-        return dal.GetAll();
-    }
+        private VeThangDAL dal =
+            new VeThangDAL();
 
-    public bool DangKy(VeThangDTO vt)
-    {
-        return dal.DangKy(vt);
-    }
+        public DataTable GetAll()
+        {
+            return dal.GetAll();
+        }
 
-    public bool GiaHan(int maVe)
-    {
-        DateTime ngayMoi =
-            DateTime.Now.AddMonths(1);
+        public bool DangKy(VeThangDTO vt)
+        {
+            return dal.DangKy(vt);
+        }
 
-        return dal.GiaHan(
-            maVe,
-            ngayMoi);
-    }
+        public bool GiaHan(int maVe)
+        {
+            return dal.GiaHan(maVe);
+        }
 
-    public bool Huy(int maVe)
-    {
-        return dal.Huy(maVe);
-    }
+        public bool Huy(int maVe)
+        {
+            return dal.Huy(maVe);
+        }
 
-    public bool KiemTraVeThang(string soThe)
-    {
-        return dal.KiemTraVeThang(
-            soThe);
+        public bool KiemTraVeThang(string soThe)
+        {
+            return dal.KiemTraVeThang(soThe);
+        }
     }
 }
