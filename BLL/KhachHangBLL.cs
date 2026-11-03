@@ -1,28 +1,41 @@
-public class KhachHangBLL
+using DAL;
+using DTO;
+using System;
+using System.Data;
+
+namespace BLL
 {
-    private KhachHangDAL dal =
-        new KhachHangDAL();
-
-    public bool Them(KhachHangDTO kh)
+    public class KhachHangBLL
     {
-        if(string.IsNullOrWhiteSpace(kh.HoTen))
-            throw new Exception(
-                "Họ tên không được để trống");
+        private KhachHangDAL dal =
+            new KhachHangDAL();
 
-        if(string.IsNullOrWhiteSpace(kh.SoDienThoai))
-            throw new Exception(
-                "SĐT không được để trống");
+        public DataTable GetAll()
+        {
+            return dal.GetAll();
+        }
 
-        return dal.Insert(kh);
-    }
+        public bool Them(KhachHangDTO kh)
+        {
+            if (string.IsNullOrWhiteSpace(kh.HoTen))
+                throw new Exception(
+                    "Họ tên không được để trống");
 
-    public bool Sua(KhachHangDTO kh)
-    {
-        return dal.Update(kh);
-    }
+            if (string.IsNullOrWhiteSpace(kh.SoDienThoai))
+                throw new Exception(
+                    "SĐT không được để trống");
 
-    public bool Xoa(int maKH)
-    {
-        return dal.Delete(maKH);
+            return dal.Insert(kh);
+        }
+
+        public bool Sua(KhachHangDTO kh)
+        {
+            return dal.Update(kh);
+        }
+
+        public bool Xoa(int maKH)
+        {
+            return dal.Delete(maKH);
+        }
     }
 }
