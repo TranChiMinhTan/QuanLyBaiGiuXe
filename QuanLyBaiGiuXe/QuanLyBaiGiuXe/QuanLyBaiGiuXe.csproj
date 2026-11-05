@@ -36,6 +36,7 @@
     <Reference Include="System">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.dll</HintPath>
     </Reference>
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
@@ -49,6 +50,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BLL\LuotGuiBLL.cs" />
+    <Compile Include="BLL\TinhPhiBLL.cs" />
+    <Compile Include="BLL\VeThangBLL.cs" />
+    <Compile Include="DAL\BangGiaDAL.cs" />
+    <Compile Include="DAL\Database.cs" />
+    <Compile Include="DAL\LoaiXeDAL.cs" />
+    <Compile Include="DAL\LuotGuiDAL.cs" />
+    <Compile Include="DAL\TheXeDAL.cs" />
+    <Compile Include="DAL\VeThangDAL.cs" />
+    <Compile Include="Models\BangGiaDTO.cs" />
+    <Compile Include="Models\BienNhanDTO.cs" />
+    <Compile Include="Models\DoanhThuDTO.cs" />
+    <Compile Include="Models\KetQua.cs" />
+    <Compile Include="Models\KhachHangDTO.cs" />
+    <Compile Include="Models\LoaiXeDTO.cs" />
+    <Compile Include="Models\LuotGuiDTO.cs" />
+    <Compile Include="Models\OGuiDTO.cs" />
+    <Compile Include="Models\TaiKhoanDTO.cs" />
+    <Compile Include="Models\ThanhToanDTO.cs" />
+    <Compile Include="Models\TheXeDTO.cs" />
+    <Compile Include="Models\VeThangDTO.cs" />
+    <Compile Include="Presenters\VanHanhPresenter.cs" />
     <Compile Include="Views\FrmDangNhap.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -63,6 +86,16 @@
     <Compile Include="Views\FrmMain.Designer.cs">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\IBangGiaView.cs" />
+    <Compile Include="Views\IBaoCaoView.cs" />
+    <Compile Include="Views\IDangNhapView.cs" />
+    <Compile Include="Views\IKhachHangView.cs" />
+    <Compile Include="Views\ILoaiXeView.cs" />
+    <Compile Include="Views\ITheXeView.cs" />
+    <Compile Include="Views\ITraCuuView.cs" />
+    <Compile Include="Views\IVanHanhView.cs" />
+    <Compile Include="Views\IVeThangView.cs" />
+    <Compile Include="Views\IViewCoBan.cs" />
     <Compile Include="Views\ucBangGia.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -162,6 +195,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
