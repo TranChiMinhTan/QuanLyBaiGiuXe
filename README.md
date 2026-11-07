@@ -39,39 +39,5 @@ QuanLyBaiXe
 |-- DAL       (Database.cs, LoaiXeDAL, TheXeDAL, BangGiaDAL, TaiKhoanDAL, ...)
 |-- BLL       (KetQua, PhienDangNhap, LoaiXeBLL, TheXeBLL, BangGiaBLL, TaiKhoanBLL, ...)
 |-- GUI       (FrmDangNhap, FrmMain, FrmDanhMucBase, FrmLoaiXe, ...)
-|-- Resources (ảnh biển số, biểu tượng)
 `-- Scripts   (Database.sql)
 ```
-
-## 6. Quy ước chung cho cả nhóm
-**Tên lớp form (FrmMain mở form theo tên lớp, phải đúng chính tả, namespace `QuanLyBaiXe.GUI`, có constructor không tham số):**
-
-| Người | Tên lớp form |
-|---|---|
-| 1 | `FrmLoaiXe`, `FrmTheXe`, `FrmBangGia` |
-| 2 | `FrmXeVao`, `FrmXeRa` |
-| 3 | `FrmKhachHang`, `FrmVeThang` |
-| 4 | `FrmLichSuLuotGui`, `FrmBaoCaoDoanhThu`, `FrmThongKeLuotXe` |
-
-**Hàm dùng chung do Người 1 cung cấp:**
-- `Database.LayBang / ThucThi / LayGiaTri(sql, Database.Tham("@x", giaTri))` – luôn dùng tham số, không nối chuỗi SQL.
-- `Database.LayBangProc / ThucThiProc` – gọi stored procedure.
-- `Database.ChayTrongTransaction((cn, tr) => { ... })` – transaction, tự rollback khi có exception (dùng cho xe ra + thanh toán, đăng ký vé tháng).
-- `BangGiaBLL.LayHieuLucTheoLoai(maLoaiXe)` – bảng giá đang áp dụng (Người 2 dùng để tính phí).
-- `TheXeBLL.LayTheoMa(maThe)`, `TheXeDAL.CapNhatTrangThai(cn, tr, maThe, trangThai)` và hằng số `TrangThaiThe` – xe vào đặt `DangDung`, xe ra đặt `SanSang`.
-- `PhienDangNhap.TenDangNhap` – tên nhân viên đang đăng nhập, điền vào `NhanVienVao` / `NhanVienRa`.
-- `FrmDanhMucBase` – mẫu form danh mục (Thêm/Sửa/Xóa/Lưu/Hủy/Làm mới + DataGridView + ErrorProvider). Người 3 làm `FrmKhachHang` bằng cách kế thừa lớp này, xem `FrmLoaiXe.cs` làm mẫu.
-- `KetQua` – kiểu trả về của BLL cho GUI (`ThanhCong`, `ThongBao`).
-
-**Git:**
-- Chỉ **Người 1** sửa `Database.cs`, `FrmMain.cs`, `Database.sql`. Người khác cần gì thì báo hoặc tạo pull request.
-- Mỗi người làm trên nhánh riêng (`nguoi1-danhmuc`, `nguoi2-guixe`, `nguoi3-vethang`, `nguoi4-baocao`), commit nhiều lần, đều đặn từ tuần 1, message rõ ràng, rồi tạo pull request vào `main`.
-- Không commit thư mục `bin/`, `obj/`, `.vs/` (dùng `.gitignore` mẫu của Visual Studio).
-
-## 7. Thành viên
-| Người | Phụ trách |
-|---|---|
-| 1 (nhóm trưởng) | CSDL, Database.cs, đăng nhập/đổi mật khẩu/phân quyền, CRUD Loại xe – Thẻ xe – Bảng giá, FrmMain MDI |
-| 2 | Xe vào, xe ra (master-detail), tính phí, transaction thanh toán |
-| 3 | Khách hàng, vé tháng, số chỗ trống, test case, kịch bản demo |
-| 4 | Tra cứu lịch sử, in vé/biên nhận, báo cáo doanh thu, biểu đồ GDI+, ảnh biển số, slide + PDF |
