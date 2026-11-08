@@ -161,19 +161,3 @@ BLL (nghiệp vụ) ──→ DAL (ADO.NET/SQL) ──→ SQL Server
 2. Ở tab **Vận hành**, nhập biển số, mã thẻ, chọn loại xe tương ứng và dùng **Xe vào** để ghi nhận lượt gửi.
 3. Khi xe rời bãi, nhập mã thẻ hoặc chọn thẻ đang có xe trên sơ đồ để điền mã, rồi bấm **Xe ra**. Xem phí tạm tính và xác nhận thanh toán; có thể in biên nhận sau khi thanh toán thành công.
 4. Dùng các tab **Tra cứu**, **Vé tháng** và **Khách hàng** để tra cứu hoặc quản lý dữ liệu. Quản lý có thể mở **Báo cáo** để xem doanh thu, xuất CSV hoặc mở thống kê giờ cao điểm và gợi ý vé tháng.
-
-## 👥 Thành viên và đóng góp
-
-| MSSV | Họ tên | Phần phụ trách | GitHub |
-|---|---|---|---|
-| 51.01.104.089 | Trần Chí Minh Tân | Thẻ xe, loại xe, bảng giá, tài khoản, CSDL | [@TranChiMinhTan](https://github.com/TranChiMinhTan) |
-| 51.01.104.053 | Woòng Vĩnh Kiệt | Vận hành xe vào/ra, tính phí, in vé | [@KIỆTWV12](https://github.com/vongvinhkiet82-sudo) |
-| 51.01.104.030 | Nguyễn Bảo Hoan | Khách hàng, vé tháng | [@hoansfsfs](https://github.com/hoansfsfs) |
-| 51.01.104.019 | Nguyễn Hải Đăng | Báo cáo, thống kê, xuất CSV | [@dangdeptrai-quincyk](https://github.com/dangdeptrai-quincyk) |
-
----
-
-## 📚 Báo cáo
-
-- Bản PDF: [report/BaoCao.pdf](report/BaoCao.pdf)
-- Mã nguồn LaTeX: [report/BaoCao_latex.zip](report/BaoCao_latex.zip)
