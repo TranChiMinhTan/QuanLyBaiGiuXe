@@ -1,0 +1,155 @@
+\chapter{Kết luận và hướng phát triển}
+
+% Phụ trách: ............
+
+Chương này tổng kết những kết quả đạt được trong quá trình thực hiện
+đề tài, đánh giá các hạn chế còn tồn tại của hệ thống và đề xuất các
+hướng phát triển trong tương lai nhằm nâng cao hiệu quả quản lý
+bãi giữ xe.
+
+% ==================================================
+\section{Kết quả đạt được}
+% ==================================================
+
+Sau thời gian nghiên cứu, phân tích, thiết kế và triển khai, nhóm đã
+hoàn thành hệ thống quản lý bãi giữ xe trên nền tảng Windows Forms
+và SQL Server.
+
+Hệ thống đáp ứng được các mục tiêu đã đề ra ở Chương~1 và hiện thực
+thành công các yêu cầu chức năng được phân tích ở Chương~3.
+
+Các kết quả chính đạt được gồm:
+
+\begin{itemize}
+    \item Xây dựng được cơ sở dữ liệu quản lý thông tin loại xe,
+    thẻ xe, khách hàng, vé tháng, bảng giá và lịch sử lượt gửi.
+
+    \item Triển khai thành công chức năng ghi nhận xe vào và xe ra
+    theo quy trình thực tế của bãi giữ xe.
+
+    \item Xây dựng module tính phí tự động dựa trên loại xe và thời
+    gian gửi bằng cách sử dụng \texttt{DateTime}, \texttt{TimeSpan}
+    và delegate \texttt{Func}.
+
+    \item Triển khai chức năng quản lý vé tháng, bao gồm đăng ký mới,
+    gia hạn và kiểm tra trạng thái còn hiệu lực.
+
+    \item Bảo đảm tính toàn vẹn dữ liệu thông qua transaction trong
+    quá trình thanh toán và cập nhật thông tin xe ra.
+
+    \item Hỗ trợ tra cứu lịch sử gửi xe theo biển số, thẻ xe và
+    khoảng thời gian.
+
+    \item Hỗ trợ in vé xe khi xe vào và in biên nhận khi thanh toán.
+
+    \item Thống kê doanh thu theo ngày hoặc khoảng thời gian phục vụ
+    công tác quản lý và đối soát.
+
+    \item Tổ chức mã nguồn theo mô hình ba lớp (GUI, BLL, DAL),
+    giúp chương trình dễ bảo trì và mở rộng.
+\end{itemize}
+
+Kết quả kiểm thử ở Chương~6 cho thấy các chức năng chính của hệ thống
+hoạt động ổn định, cho kết quả đúng với mong đợi và đáp ứng được các
+yêu cầu nghiệp vụ đã đặt ra.
+
+% ==================================================
+\section{Hạn chế}
+% ==================================================
+
+Mặc dù đã hoàn thành các chức năng cốt lõi của bài toán quản lý
+bãi giữ xe, hệ thống vẫn còn một số hạn chế:
+
+\begin{itemize}
+    \item Việc nhận dạng biển số xe vẫn được thực hiện bằng cách
+    nhập thủ công, chưa hỗ trợ nhận diện tự động bằng camera.
+
+    \item Chưa tích hợp với các thiết bị phần cứng như camera giám
+    sát, đầu đọc RFID hoặc barie tự động.
+
+    \item Chưa hỗ trợ thanh toán điện tử bằng ví điện tử, ngân hàng
+    hoặc mã QR.
+
+    \item Chưa có cơ chế sao lưu và phục hồi dữ liệu tự động.
+
+    \item Chưa hỗ trợ mô hình quản lý nhiều bãi xe đồng thời trong
+    cùng một hệ thống.
+
+    \item Chức năng thống kê còn ở mức cơ bản, chủ yếu tập trung vào
+    doanh thu và chưa cung cấp các báo cáo chuyên sâu.
+
+    \item Hệ thống được xây dựng dưới dạng ứng dụng desktop nên chỉ
+    hoạt động trên môi trường Windows và chưa hỗ trợ truy cập từ xa
+    qua trình duyệt web.
+\end{itemize}
+
+Những hạn chế trên chủ yếu xuất phát từ phạm vi của đề tài môn học
+và giới hạn về thời gian thực hiện.
+
+% ==================================================
+\section{Hướng phát triển}
+% ==================================================
+
+Trong tương lai, hệ thống có thể được mở rộng theo các hướng sau:
+
+\subsection{Tích hợp nhận dạng biển số tự động}
+
+Kết hợp camera và các thư viện xử lý ảnh để tự động nhận diện biển
+số xe khi xe vào hoặc xe ra. Việc này giúp giảm thao tác nhập liệu
+bằng tay và tăng độ chính xác trong quản lý.
+
+\subsection{Hiển thị số chỗ trống}
+
+Hệ thống có thể theo dõi sức chứa của bãi xe và hiển thị số lượng
+chỗ còn trống theo thời gian thực. Chức năng này hỗ trợ nhân viên
+điều phối xe hiệu quả hơn.
+
+\subsection{Lưu ảnh xe và biển số}
+
+Khi xe vào hoặc xe ra, hệ thống có thể lưu ảnh chụp biển số và
+phương tiện để phục vụ đối chiếu khi xảy ra tranh chấp hoặc mất vé.
+
+\subsection{Mở rộng chức năng thống kê}
+
+Bổ sung các báo cáo:
+
+\begin{itemize}
+    \item Số lượt xe theo ngày.
+    \item Số lượt xe theo loại phương tiện.
+    \item Biểu đồ doanh thu theo tháng.
+    \item Tỷ lệ sử dụng bãi xe.
+    \item Danh sách vé tháng sắp hết hạn.
+\end{itemize}
+
+\subsection{Tích hợp thanh toán điện tử}
+
+Cho phép khách hàng thanh toán thông qua mã QR, ví điện tử hoặc
+chuyển khoản ngân hàng nhằm giảm thời gian xử lý tại cổng ra.
+
+\subsection{Triển khai trên nền tảng Web}
+
+Chuyển hệ thống từ ứng dụng WinForms sang kiến trúc Web hoặc
+Web API giúp người quản lý có thể theo dõi và điều hành bãi xe
+từ nhiều thiết bị khác nhau.
+
+\subsection{Quản lý nhiều bãi xe}
+
+Mở rộng hệ thống theo hướng cho phép quản lý đồng thời nhiều
+chi nhánh bãi giữ xe với cơ sở dữ liệu tập trung.
+
+% ==================================================
+\section*{Kết chương}
+% ==================================================
+
+Đề tài ``Quản lý bãi giữ xe'' đã hoàn thành các mục tiêu đặt ra
+và xây dựng được một hệ thống đáp ứng các nghiệp vụ cơ bản trong
+thực tế như ghi nhận xe vào, xe ra, tính phí, quản lý vé tháng,
+tra cứu lịch sử và thống kê doanh thu.
+
+Mặc dù vẫn còn một số hạn chế, hệ thống đã thể hiện được việc
+vận dụng các kiến thức về lập trình hướng đối tượng, xử lý thời
+gian, cơ sở dữ liệu quan hệ, ADO.NET, transaction và kiến trúc
+phân lớp trong quá trình phát triển phần mềm.
+
+Đây là nền tảng để tiếp tục mở rộng và hoàn thiện hệ thống trong
+các nghiên cứu và dự án tiếp theo.

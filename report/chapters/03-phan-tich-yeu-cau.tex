@@ -1,0 +1,380 @@
+\chapter{Phân tích yêu cầu}
+\captionsetup[table]{position=below,skip=6pt}
+
+Chương này phân tích bài toán quản lý bãi giữ xe: khảo sát nghiệp vụ, xác định các đối tượng dữ liệu và quy tắc nghiệp vụ, từ đó rút ra yêu cầu chức năng, yêu cầu phi chức năng và đặc tả các use case của hệ thống.
+
+\section{Khảo sát nghiệp vụ}
+
+\subsection{Mô tả bài toán}
+
+Theo đề bài, hệ thống cần quản lý \textit{loại xe, thẻ xe, lượt vào ra, vé tháng và doanh thu} của bãi giữ xe. Người sử dụng là nhân viên bãi xe và người quản lý. Các chức năng chính cần xây dựng gồm: ghi nhận xe vào và xe ra, tính phí theo loại xe và thời gian, quản lý vé tháng, tra cứu lịch sử lượt gửi, in vé hoặc biên nhận.
+
+\subsection{Quy trình thủ công hiện tại}
+
+Ở các bãi xe chưa dùng phần mềm, quy trình thường diễn ra như sau: khi xe vào, nhân viên ghi biển số và giờ vào lên vé giấy, đưa một nửa vé cho khách; khi xe ra, nhân viên đối chiếu vé, tính nhẩm số giờ gửi, nhân với đơn giá rồi thu tiền; cuối ngày nhân viên cộng sổ để biết doanh thu. Khách gửi theo tháng được nhân viên nhớ mặt hoặc tra sổ riêng. Các hạn chế của quy trình này đã được nêu ở Chương~1 (dễ sai khi tính phí, khó quản lý vé tháng, khó tra cứu và đối soát).
+
+\subsection{Quy trình đề xuất với hệ thống}
+
+\paragraph{Xe vào.} Nhân viên nhập (hoặc quét) mã thẻ xe, nhập biển số và chọn loại xe. Hệ thống kiểm tra thẻ đang rảnh, ghi nhận giờ vào bằng giờ hệ thống và tạo một lượt gửi mới, sau đó in vé.
+
+\paragraph{Xe ra.} Nhân viên nhập mã thẻ hoặc biển số để tìm lượt gửi đang mở. Hệ thống ghi nhận giờ ra, tính phí theo loại xe và thời gian gửi (hoặc miễn phí nếu xe có vé tháng còn hạn), hiển thị số tiền để nhân viên thu. Khi xác nhận, hệ thống cập nhật lượt gửi, ghi thanh toán và giải phóng thẻ trong một transaction, sau đó in biên nhận.
+
+\paragraph{Vé tháng.} Người quản lý đăng ký vé tháng cho khách hàng theo loại xe và thời hạn, gia hạn khi hết hạn, và tra cứu tình trạng còn hạn của từng vé.
+
+\paragraph{Tra cứu và thống kê.} Nhân viên và người quản lý tra cứu lịch sử lượt gửi theo biển số, thẻ xe hoặc khoảng thời gian; người quản lý xem doanh thu theo ngày hoặc theo khoảng thời gian.
+
+\subsection{Các đối tượng dữ liệu chính}
+
+Từ mô tả đề bài, hệ thống làm việc với sáu nhóm dữ liệu chính, tóm tắt trong Bảng~\ref{tab:doituong}. Cấu trúc chi tiết (cột, kiểu dữ liệu, ràng buộc) được thiết kế ở Chương~4.
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{@{}lp{10.5cm}@{}}
+    \toprule
+    \textbf{Đối tượng} & \textbf{Mô tả} \\
+    \midrule
+    Loại xe & Phân loại phương tiện (ví dụ: xe đạp, xe máy, ô tô), là cơ sở để áp dụng đơn giá \\
+    Thẻ xe & Thẻ cấp cho xe khi vào bãi, định danh một lượt gửi \\
+    Khách hàng & Thông tin người đăng ký vé tháng (họ tên, số điện thoại, biển số) \\
+    Vé tháng & Vé gửi xe theo tháng của khách hàng, có ngày bắt đầu và ngày kết thúc \\
+    Lượt gửi & Một lần xe vào và ra: biển số, giờ vào, giờ ra, phí \\
+    Bảng giá & Đơn giá gửi xe theo từng loại xe và quy tắc thời gian \\
+    \bottomrule
+  \end{tabular}
+    \caption{Các đối tượng dữ liệu chính của hệ thống}
+  \label{tab:doituong}
+\end{table}
+
+\subsection{Quy tắc nghiệp vụ}
+
+Các quy tắc trong Bảng~\ref{tab:quytac} được xây dựng từ mô tả đề bài và thông lệ vận hành bãi xe. Các giá trị cụ thể như đơn giá, thời gian miễn phí do người quản lý cấu hình trong Bảng giá.
+
+\begin{longtable}{@{}l p{13.3cm}@{}}
+  \toprule
+  \textbf{Mã} & \textbf{Nội dung quy tắc} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{Mã} & \textbf{Nội dung quy tắc} \\
+  \midrule
+  \endhead
+  QT01 & Tại một thời điểm, mỗi thẻ xe chỉ gắn với tối đa một lượt gửi chưa kết thúc. \\
+  QT02 & Giờ vào được lấy từ giờ hệ thống (\texttt{DateTime.Now}) khi tạo lượt gửi; giờ ra lấy khi xe ra và phải lớn hơn hoặc bằng giờ vào. \\
+  QT03 & Phí gửi xe được tính theo loại xe và thời gian gửi, dựa trên đơn giá trong Bảng giá; đơn vị tiền là đồng (VNĐ). \\
+  QT04 & Thời gian gửi được làm tròn theo quy định của Bảng giá (ví dụ làm tròn lên theo giờ); có thể cấu hình thời gian miễn phí ban đầu. \\
+  QT05 & Xe gửi qua đêm hoặc nhiều ngày được tính phí theo quy định trong Bảng giá (ví dụ theo ngày hoặc có phụ thu qua đêm). \\
+  QT06 & Xe có vé tháng còn hạn thì phí theo lượt bằng 0; vé tháng hết hạn thì được tính như xe gửi thông thường. \\
+  QT07 & Vé tháng có ngày bắt đầu và ngày kết thúc; khi gia hạn, thời hạn mới được tính nối tiếp từ ngày hết hạn (hoặc từ ngày gia hạn nếu vé đã hết hạn). \\
+  QT08 & Doanh thu gồm tiền phí các lượt gửi và tiền đăng ký, gia hạn vé tháng. \\
+  QT09 & Việc cập nhật lượt gửi, ghi thanh toán và giải phóng thẻ khi xe ra phải thực hiện trong một transaction. \\
+  QT10 & Lượt gửi đã kết thúc không bị xóa để bảo đảm khả năng tra cứu và đối soát. \\
+  \bottomrule
+  \caption{Các quy tắc nghiệp vụ}\label{tab:quytac}\\
+\end{longtable}
+
+\section{Yêu cầu chức năng}
+
+\subsection{Tác nhân}
+
+Hệ thống có hai tác nhân: \textbf{Nhân viên bãi xe} (thực hiện nghiệp vụ tại cổng) và \textbf{Quản lý} (quản lý danh mục, vé tháng, xem doanh thu). Quản lý được thực hiện mọi chức năng của Nhân viên, do đó trên biểu đồ use case, Quản lý được biểu diễn là tác nhân kế thừa Nhân viên.
+
+\subsection{Danh sách yêu cầu chức năng}
+
+\begin{longtable}{@{}l p{3.6cm} p{7.2cm} l@{}}
+  \toprule
+  \textbf{Mã} & \textbf{Chức năng} & \textbf{Mô tả} & \textbf{Mức} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{Mã} & \textbf{Chức năng} & \textbf{Mô tả} & \textbf{Mức} \\
+  \midrule
+  \endhead
+  FR01 & Ghi nhận xe vào & Tạo lượt gửi mới với mã thẻ, biển số, loại xe, giờ vào & Bắt buộc \\
+  FR02 & Ghi nhận xe ra & Tìm lượt gửi đang mở, ghi giờ ra, đóng lượt gửi & Bắt buộc \\
+  FR03 & Tính phí & Tính phí theo loại xe và thời gian gửi bằng công thức lấy đơn giá từ Bảng giá; xe có vé tháng còn hạn miễn phí & Bắt buộc \\
+  FR04 & Thanh toán & Xác nhận thu tiền và ghi nhận thanh toán trong một transaction & Bắt buộc \\
+  FR05 & Quản lý vé tháng & Đăng ký, gia hạn, tra cứu tình trạng còn hạn của vé tháng & Bắt buộc \\
+  FR06 & Quản lý khách hàng & Thêm, sửa, tìm kiếm thông tin khách hàng đăng ký vé tháng & Bắt buộc \\
+  FR07 & Quản lý loại xe và bảng giá & Thêm, sửa loại xe và đơn giá tương ứng & Bắt buộc \\
+  FR08 & Quản lý thẻ xe & Thêm thẻ, theo dõi trạng thái rảnh hoặc đang dùng & Bắt buộc \\
+  FR09 & Tra cứu lịch sử lượt gửi & Tìm theo biển số, mã thẻ, loại xe, khoảng thời gian & Bắt buộc \\
+  FR10 & In vé và biên nhận & In vé khi xe vào và biên nhận khi xe ra & Bắt buộc \\
+  FR11 & Thống kê doanh thu & Tổng hợp doanh thu theo ngày hoặc khoảng thời gian & Bắt buộc \\
+  FR12 & Đăng nhập và phân quyền & Phân quyền chức năng theo vai trò Nhân viên và Quản lý & Bắt buộc \\
+  FR13 & Hiển thị số chỗ trống & Cho biết số chỗ còn trống của bãi theo sức chứa & Mở rộng \\
+  FR14 & Lưu ảnh biển số & Lưu ảnh chụp biển số khi xe vào và xe ra & Mở rộng \\
+  FR15 & Thống kê lượt xe theo ngày & Đếm số lượt xe vào, ra theo từng ngày và loại xe & Mở rộng \\
+  \bottomrule
+  \caption{Danh sách yêu cầu chức năng}\label{tab:fr}\\
+\end{longtable}
+
+\section{Yêu cầu phi chức năng}
+
+\begin{longtable}{@{}l p{3.4cm} p{9.2cm}@{}}
+  \toprule
+  \textbf{Mã} & \textbf{Nhóm} & \textbf{Yêu cầu} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{Mã} & \textbf{Nhóm} & \textbf{Yêu cầu} \\
+  \midrule
+  \endhead
+  NFR01 & Tính chính xác & Phí được tính đúng theo Bảng giá; dùng kiểu \texttt{decimal} cho tiền tệ để tránh sai số làm tròn. \\
+  NFR02 & Toàn vẹn dữ liệu & Các thao tác thanh toán khi xe ra phải nhất quán, dùng transaction và có rollback khi lỗi. \\
+  NFR03 & Hiệu năng & Thao tác ghi nhận xe vào, xe ra và tra cứu thông thường phản hồi trong thời gian ngắn, không gây chờ đợi tại cổng. \\
+  NFR04 & Tính dễ dùng & Giao diện rõ ràng, ít bước thao tác, hỗ trợ nhập bằng bàn phím; thông báo lỗi dễ hiểu. \\
+  NFR05 & Bảo mật & Phân quyền theo vai trò; truy vấn SQL tham số hóa để phòng SQL Injection; không lưu mật khẩu dạng văn bản thô. \\
+  NFR06 & Khả năng bảo trì & Mã nguồn tổ chức theo ba lớp (GUI, BLL, DAL) để dễ sửa đổi, mở rộng và kiểm thử. \\
+  NFR07 & Tương thích & Chạy trên Windows với .NET Framework; lưu trữ trên SQL Server. \\
+  NFR08 & Khả năng truy vết & Lịch sử lượt gửi và thanh toán được lưu lại, có thể tra cứu và đối soát. \\
+  \bottomrule
+  \caption{Danh sách yêu cầu phi chức năng}\label{tab:nfr}\\
+\end{longtable}
+
+\section{Biểu đồ use case}
+
+Biểu đồ use case tổng quát của hệ thống được thể hiện ở Hình~\ref{fig:usecase}. Hai tác nhân là Nhân viên và Quản lý; use case \textit{Ghi nhận xe ra và thanh toán} bao gồm (include) \textit{Tính phí}, các use case ghi nhận xe vào và xe ra đều bao gồm \textit{In vé/biên nhận}.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[
+      >={Stealth[length=2.2mm]},
+      uc/.style={ellipse, draw, minimum width=4.2cm, minimum height=1.1cm, align=center, font=\small},
+      lbl/.style={font=\scriptsize, fill=white, inner sep=1pt}
+    ]
+    % Ranh giới hệ thống
+    \draw (2.3,0.9) rectangle (14.4,-11.0);
+    \node[font=\small\bfseries] at (8.5,0.55) {Hệ thống quản lý bãi giữ xe};
+
+    % Use case của Nhân viên
+    \node[uc] (uc1) at (5.4,-0.4) {UC01\\Ghi nhận xe vào};
+    \node[uc] (uc2) at (5.4,-2.4) {UC02\\Ghi nhận xe ra\\và thanh toán};
+    \node[uc] (uc4) at (5.4,-4.6) {UC04\\Tra cứu lịch sử};
+    % Use case dùng chung
+    \node[uc] (uc5) at (11.8,-0.4) {UC05\\In vé / biên nhận};
+    \node[uc] (uc8) at (11.8,-2.4) {UC08\\Tính phí};
+    % Use case của Quản lý
+    \node[uc] (uc3) at (5.4,-6.8) {UC03\\Quản lý vé tháng};
+    \node[uc] (uc6) at (5.4,-8.6) {UC06\\Quản lý danh mục};
+    \node[uc] (uc7) at (5.4,-10.4) {UC07\\Thống kê doanh thu};
+
+    % Tác nhân: Nhân viên
+    \begin{scope}[shift={(0.9,-2.4)}]
+      \draw (0,0.9) circle (0.25);
+      \draw (0,0.65) -- (0,-0.1);
+      \draw (-0.4,0.4) -- (0.4,0.4);
+      \draw (0,-0.1) -- (-0.3,-0.7);
+      \draw (0,-0.1) -- (0.3,-0.7);
+      \node[font=\small, align=center] at (0,-1.15) {Nhân viên};
+    \end{scope}
+    % Tác nhân: Quản lý
+    \begin{scope}[shift={(0.9,-8.4)}]
+      \draw (0,0.9) circle (0.25);
+      \draw (0,0.65) -- (0,-0.1);
+      \draw (-0.4,0.4) -- (0.4,0.4);
+      \draw (0,-0.1) -- (-0.3,-0.7);
+      \draw (0,-0.1) -- (0.3,-0.7);
+      \node[font=\small, align=center] at (0,-1.15) {Quản lý};
+    \end{scope}
+
+    % Kế thừa: Quản lý -> Nhân viên
+    \draw[-{Triangle[open, length=3mm, width=3mm]}] (0.9,-7.5) -- (0.9,-3.9);
+
+    % Nhân viên - use case
+    \draw (1.2,-2.0) -- (uc1.west);
+    \draw (1.2,-2.0) -- (uc2.west);
+    \draw (1.2,-2.0) -- (uc4.west);
+    % Quản lý - use case
+    \draw (1.2,-8.0) -- (uc3.west);
+    \draw (1.2,-8.0) -- (uc6.west);
+    \draw (1.2,-8.0) -- (uc7.west);
+
+    % include
+    \draw[->,dashed] (uc1) -- node[lbl,above] {«include»} (uc5);
+    \draw[->,dashed] (uc2) -- node[lbl,above] {«include»} (uc8);
+    \draw[->,dashed] (uc2.north east) -- node[lbl,pos=0.55,sloped,above] {«include»} (uc5.south west);
+  \end{tikzpicture}
+  \caption{Biểu đồ use case tổng quát}
+  \label{fig:usecase}
+\end{figure}
+
+Danh sách use case được tóm tắt trong Bảng~\ref{tab:dsuc}.
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{@{}lp{5.2cm}p{3.4cm}l@{}}
+    \toprule
+    \textbf{Mã} & \textbf{Tên use case} & \textbf{Tác nhân} & \textbf{Yêu cầu} \\
+    \midrule
+    UC01 & Ghi nhận xe vào & Nhân viên & FR01 \\
+    UC02 & Ghi nhận xe ra và thanh toán & Nhân viên & FR02, FR04 \\
+    UC03 & Quản lý vé tháng & Quản lý & FR05, FR06 \\
+    UC04 & Tra cứu lịch sử lượt gửi & Nhân viên, Quản lý & FR09 \\
+    UC05 & In vé và biên nhận & Nhân viên, Quản lý & FR10 \\
+    UC06 & Quản lý danh mục & Quản lý & FR07, FR08 \\
+    UC07 & Xem thống kê doanh thu & Quản lý & FR11 \\
+    UC08 & Tính phí & (dùng bởi UC02) & FR03 \\
+    \bottomrule
+  \end{tabular}
+    \caption{Danh sách use case}
+  \label{tab:dsuc}
+\end{table}
+
+\section{Đặc tả use case}
+
+\newcommand{\specrow}[2]{\textbf{#1} & #2 \\ \hline}
+
+\subsection{UC01 -- Ghi nhận xe vào}
+
+\begin{longtable}{|p{3.2cm}|p{11.6cm}|}
+  \hline
+  \specrow{Tác nhân}{Nhân viên (và Quản lý)}
+  \specrow{Mô tả}{Tạo lượt gửi mới khi xe vào bãi và in vé.}
+  \specrow{Tiền điều kiện}{Người dùng đã đăng nhập; thẻ xe được cấp cho xe đang ở trạng thái rảnh.}
+  \specrow{Hậu điều kiện}{Một lượt gửi mới được lưu với giờ vào; thẻ xe chuyển sang trạng thái đang dùng; vé được in.}
+  \specrow{Luồng chính}{1. Nhân viên nhập mã thẻ xe và biển số xe.\newline 2. Nhân viên chọn loại xe.\newline 3. Hệ thống kiểm tra dữ liệu nhập hợp lệ và thẻ đang rảnh.\newline 4. Hệ thống lấy giờ hiện tại làm giờ vào và tạo lượt gửi mới.\newline 5. Hệ thống cập nhật trạng thái thẻ và in vé (UC05).\newline 6. Hệ thống thông báo ghi nhận thành công.}
+  \specrow{Luồng thay thế}{3a. Thẻ đang được dùng cho lượt gửi chưa kết thúc: hệ thống báo lỗi, không tạo lượt gửi.\newline 3b. Thiếu biển số hoặc chưa chọn loại xe: hệ thống yêu cầu nhập đầy đủ.\newline 3c. Biển số trùng một lượt gửi đang mở: hệ thống cảnh báo để nhân viên kiểm tra.}
+  \caption{Đặc tả UC01 -- Ghi nhận xe vào}\\
+\end{longtable}
+
+\subsection{UC02 -- Ghi nhận xe ra và thanh toán}
+
+\begin{longtable}{|p{3.2cm}|p{11.6cm}|}
+  \hline
+  \specrow{Tác nhân}{Nhân viên (và Quản lý)}
+  \specrow{Mô tả}{Ghi nhận xe ra, tính phí, thu tiền và đóng lượt gửi.}
+  \specrow{Tiền điều kiện}{Người dùng đã đăng nhập; tồn tại lượt gửi đang mở ứng với thẻ hoặc biển số.}
+  \specrow{Hậu điều kiện}{Lượt gửi có giờ ra và phí; thanh toán được ghi nhận; thẻ xe được giải phóng; biên nhận được in. Nếu có lỗi, dữ liệu không thay đổi.}
+  \specrow{Luồng chính}{1. Nhân viên nhập mã thẻ hoặc biển số.\newline 2. Hệ thống tìm lượt gửi đang mở và hiển thị thông tin.\newline 3. Hệ thống lấy giờ hiện tại làm giờ ra.\newline 4. Hệ thống kiểm tra vé tháng và tính phí (UC08).\newline 5. Hệ thống hiển thị thời gian gửi và số tiền phải thu.\newline 6. Nhân viên xác nhận đã thu tiền.\newline 7. Hệ thống thực hiện trong một transaction: cập nhật giờ ra và phí, ghi thanh toán, giải phóng thẻ.\newline 8. Hệ thống in biên nhận (UC05) và thông báo thành công.}
+  \specrow{Luồng thay thế}{2a. Không tìm thấy lượt gửi đang mở: hệ thống báo lỗi.\newline 2b. Khách mất thẻ: nhân viên tra cứu lượt gửi theo biển số (UC04) và xử lý theo quy định của bãi xe.\newline 4a. Xe có vé tháng còn hạn: phí bằng 0, bỏ qua bước thu tiền.\newline 7a. Có lỗi khi ghi dữ liệu: hệ thống rollback toàn bộ, báo lỗi và không đóng lượt gửi.}
+  \caption{Đặc tả UC02 -- Ghi nhận xe ra và thanh toán}\\
+\end{longtable}
+
+\subsection{UC03 -- Quản lý vé tháng}
+
+\begin{longtable}{|p{3.2cm}|p{11.6cm}|}
+  \hline
+  \specrow{Tác nhân}{Quản lý}
+  \specrow{Mô tả}{Đăng ký, gia hạn và theo dõi vé tháng của khách hàng.}
+  \specrow{Tiền điều kiện}{Quản lý đã đăng nhập.}
+  \specrow{Hậu điều kiện}{Thông tin khách hàng và vé tháng được lưu hoặc cập nhật; tiền vé được ghi nhận vào doanh thu.}
+  \specrow{Luồng chính}{1. Quản lý chọn chức năng quản lý vé tháng.\newline 2. Quản lý chọn khách hàng có sẵn hoặc thêm khách hàng mới.\newline 3. Quản lý nhập biển số, loại xe, ngày bắt đầu và thời hạn.\newline 4. Hệ thống tính ngày kết thúc và số tiền vé theo Bảng giá.\newline 5. Quản lý xác nhận, hệ thống lưu vé tháng và ghi nhận tiền.}
+  \specrow{Luồng thay thế}{2a. Gia hạn: quản lý chọn vé hiện có, hệ thống tính thời hạn mới theo QT07.\newline 3a. Biển số đã có vé tháng còn hạn: hệ thống cảnh báo trùng.\newline 5a. Dữ liệu không hợp lệ: hệ thống báo lỗi và yêu cầu nhập lại.}
+  \caption{Đặc tả UC03 -- Quản lý vé tháng}\\
+\end{longtable}
+
+\subsection{UC04 -- Tra cứu lịch sử lượt gửi}
+
+\begin{longtable}{|p{3.2cm}|p{11.6cm}|}
+  \hline
+  \specrow{Tác nhân}{Nhân viên, Quản lý}
+  \specrow{Mô tả}{Tìm và xem lại các lượt gửi đã và đang diễn ra.}
+  \specrow{Tiền điều kiện}{Người dùng đã đăng nhập.}
+  \specrow{Hậu điều kiện}{Danh sách lượt gửi thỏa điều kiện được hiển thị; dữ liệu không bị thay đổi.}
+  \specrow{Luồng chính}{1. Người dùng nhập điều kiện: biển số, mã thẻ, loại xe, khoảng thời gian.\newline 2. Hệ thống truy vấn lượt gửi thỏa điều kiện.\newline 3. Hệ thống hiển thị danh sách gồm biển số, giờ vào, giờ ra, phí, trạng thái.\newline 4. Người dùng chọn một lượt gửi để xem chi tiết hoặc in lại biên nhận (UC05).}
+  \specrow{Luồng thay thế}{2a. Không có kết quả: hệ thống thông báo không tìm thấy.\newline 1a. Khoảng thời gian không hợp lệ (ngày bắt đầu sau ngày kết thúc): hệ thống yêu cầu sửa.}
+  \caption{Đặc tả UC04 -- Tra cứu lịch sử lượt gửi}\\
+\end{longtable}
+
+\subsection{UC05 -- In vé và biên nhận}
+
+\begin{longtable}{|p{3.2cm}|p{11.6cm}|}
+  \hline
+  \specrow{Tác nhân}{Nhân viên, Quản lý (được gọi từ UC01, UC02, UC04)}
+  \specrow{Mô tả}{In vé khi xe vào hoặc biên nhận khi xe ra.}
+  \specrow{Tiền điều kiện}{Đã có lượt gửi cần in; máy in sẵn sàng.}
+  \specrow{Hậu điều kiện}{Vé hoặc biên nhận được in hoặc xem trước.}
+  \specrow{Luồng chính}{1. Hệ thống tạo nội dung: mã lượt, biển số, loại xe, giờ vào (và giờ ra, số tiền nếu là biên nhận).\newline 2. Hệ thống hiển thị bản xem trước.\newline 3. Người dùng xác nhận in.\newline 4. Hệ thống gửi lệnh in.}
+  \specrow{Luồng thay thế}{4a. Không có máy in hoặc in lỗi: hệ thống báo lỗi, dữ liệu lượt gửi không bị ảnh hưởng, có thể in lại từ UC04.}
+  \caption{Đặc tả UC05 -- In vé và biên nhận}\\
+\end{longtable}
+
+\subsection{UC06 -- Quản lý danh mục}
+
+\begin{longtable}{|p{3.2cm}|p{11.6cm}|}
+  \hline
+  \specrow{Tác nhân}{Quản lý}
+  \specrow{Mô tả}{Quản lý các danh mục dùng chung: loại xe, bảng giá, thẻ xe.}
+  \specrow{Tiền điều kiện}{Quản lý đã đăng nhập.}
+  \specrow{Hậu điều kiện}{Danh mục được thêm, sửa hoặc ngừng sử dụng.}
+  \specrow{Luồng chính}{1. Quản lý chọn danh mục cần quản lý.\newline 2. Hệ thống hiển thị danh sách hiện có.\newline 3. Quản lý thêm hoặc sửa một mục và nhập thông tin (ví dụ loại xe và đơn giá).\newline 4. Hệ thống kiểm tra hợp lệ và lưu.}
+  \specrow{Luồng thay thế}{4a. Dữ liệu trùng hoặc không hợp lệ (đơn giá âm, tên rỗng): hệ thống báo lỗi.\newline 4b. Mục đã được lượt gửi sử dụng: hệ thống không xóa mà chuyển sang ngừng sử dụng để giữ lịch sử.}
+  \caption{Đặc tả UC06 -- Quản lý danh mục}\\
+\end{longtable}
+
+\subsection{UC07 -- Xem thống kê doanh thu}
+
+\begin{longtable}{|p{3.2cm}|p{11.6cm}|}
+  \hline
+  \specrow{Tác nhân}{Quản lý}
+  \specrow{Mô tả}{Xem tổng doanh thu theo ngày hoặc khoảng thời gian.}
+  \specrow{Tiền điều kiện}{Quản lý đã đăng nhập.}
+  \specrow{Hậu điều kiện}{Số liệu thống kê được hiển thị; dữ liệu không thay đổi.}
+  \specrow{Luồng chính}{1. Quản lý chọn khoảng thời gian cần xem.\newline 2. Hệ thống tổng hợp tiền phí các lượt gửi đã kết thúc và tiền vé tháng trong khoảng đó.\newline 3. Hệ thống hiển thị tổng doanh thu và chi tiết theo ngày hoặc theo loại xe.}
+  \specrow{Luồng thay thế}{2a. Không có giao dịch trong khoảng thời gian: hệ thống hiển thị doanh thu bằng 0.\newline 1a. Khoảng thời gian không hợp lệ: hệ thống yêu cầu chọn lại.}
+  \caption{Đặc tả UC07 -- Xem thống kê doanh thu}\\
+\end{longtable}
+
+\subsection{UC08 -- Tính phí}
+
+\begin{longtable}{|p{3.2cm}|p{11.6cm}|}
+  \hline
+  \specrow{Tác nhân}{Không có (được gọi từ UC02)}
+  \specrow{Mô tả}{Tính số tiền phải trả của một lượt gửi.}
+  \specrow{Tiền điều kiện}{Lượt gửi có giờ vào và giờ ra; loại xe có đơn giá trong Bảng giá.}
+  \specrow{Hậu điều kiện}{Trả về số tiền phải trả (kiểu \texttt{decimal}).}
+  \specrow{Luồng chính}{1. Hệ thống kiểm tra xe có vé tháng còn hạn hay không.\newline 2. Nếu có, trả về 0.\newline 3. Nếu không, tính thời gian gửi bằng hiệu giờ ra và giờ vào.\newline 4. Áp dụng quy tắc thời gian (miễn phí ban đầu, làm tròn, qua đêm) theo Bảng giá.\newline 5. Nhân với đơn giá của loại xe và trả về kết quả.}
+  \specrow{Luồng thay thế}{3a. Giờ ra nhỏ hơn giờ vào: hệ thống báo lỗi dữ liệu thời gian.\newline 4a. Loại xe chưa có đơn giá: hệ thống báo lỗi cấu hình Bảng giá.}
+  \caption{Đặc tả UC08 -- Tính phí}\\
+\end{longtable}
+
+\section{Luồng xử lý xe ra}
+
+Hình~\ref{fig:flowra} mô tả lưu đồ xử lý của nghiệp vụ phức tạp nhất là xe ra, gồm các nhánh kiểm tra lượt gửi, vé tháng và xử lý lỗi bằng transaction.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[
+      >={Stealth[length=2mm]},
+      node distance=0.6cm,
+      proc/.style={rectangle, draw, rounded corners=2pt, minimum width=5.2cm, minimum height=0.8cm, align=center, font=\small},
+      term/.style={rectangle, draw, rounded corners=8pt, minimum width=5.2cm, minimum height=0.8cm, align=center, font=\small},
+      dec/.style={diamond, aspect=3, draw, inner sep=0pt, minimum width=4.6cm, minimum height=1.1cm, align=center, font=\small},
+      side/.style={rectangle, draw, rounded corners=2pt, minimum width=3.4cm, minimum height=0.8cm, align=center, font=\small},
+      lbl/.style={font=\scriptsize, fill=white, inner sep=1pt}
+    ]
+    \node[term] (n1) {Nhập mã thẻ / biển số};
+    \node[dec, below=of n1] (d1) {Có lượt gửi\\đang mở?};
+    \node[proc, below=of d1] (n2) {Ghi nhận giờ ra};
+    \node[dec, below=of n2] (d2) {Vé tháng\\còn hạn?};
+    \node[proc, below=of d2] (n3) {Tính phí theo Bảng giá};
+    \node[proc, below=of n3] (n4) {Hiển thị phí, xác nhận thu tiền};
+    \node[proc, below=of n4, minimum width=7cm] (n5) {Transaction: cập nhật lượt gửi,\\ghi thanh toán, giải phóng thẻ};
+    \node[dec, below=of n5] (d3) {Thành công?};
+    \node[term, below=of d3] (n6) {In biên nhận, kết thúc};
+
+    \node[side, right=1.8cm of d1] (e1) {Báo lỗi,\\kết thúc};
+    \node[side, right=1.8cm of d2] (z) {Phí = 0};
+    \node[side, right=1.8cm of d3] (e2) {Rollback,\\báo lỗi};
+
+    \draw[->] (n1) -- (d1);
+    \draw[->] (d1) -- node[lbl,right] {Có} (n2);
+    \draw[->] (d1) -- node[lbl,above] {Không} (e1);
+    \draw[->] (n2) -- (d2);
+    \draw[->] (d2) -- node[lbl,right] {Không} (n3);
+    \draw[->] (d2) -- node[lbl,above] {Có} (z);
+    \draw[->] (n3) -- (n4);
+    \draw[->] (z.south) |- (n4.east);
+    \draw[->] (n4) -- (n5);
+    \draw[->] (n5) -- (d3);
+    \draw[->] (d3) -- node[lbl,right] {Có} (n6);
+    \draw[->] (d3) -- node[lbl,above] {Không} (e2);
+  \end{tikzpicture}
+  \caption{Lưu đồ xử lý nghiệp vụ xe ra}
+  \label{fig:flowra}
+\end{figure}
+
+\section{Tóm tắt chương}
+
+Chương này đã khảo sát nghiệp vụ bãi giữ xe, xác định sáu nhóm dữ liệu chính, mười quy tắc nghiệp vụ, mười lăm yêu cầu chức năng (trong đó ba chức năng mở rộng), tám yêu cầu phi chức năng và tám use case kèm đặc tả chi tiết. Các kết quả này là đầu vào cho việc thiết kế cơ sở dữ liệu và kiến trúc hệ thống ở Chương~4.
+\captionsetup[table]{position=above,skip=6pt}

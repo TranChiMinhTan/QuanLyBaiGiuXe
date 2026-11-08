@@ -1,0 +1,88 @@
+\chapter{Mở đầu}
+\section{Đặt vấn đề}
+
+Cùng với sự gia tăng nhanh chóng của phương tiện cá nhân tại các đô thị, nhu cầu gửi xe tại trường học, bệnh viện, trung tâm thương mại và các khu chung cư ngày càng lớn. Bãi giữ xe không còn là một dịch vụ nhỏ lẻ mà trở thành một hoạt động có lưu lượng ra vào lớn, phát sinh doanh thu hằng ngày và đòi hỏi quản lý chặt chẽ.
+
+Tại nhiều bãi xe quy mô vừa và nhỏ, việc quản lý hiện nay vẫn được thực hiện thủ công: nhân viên ghi giờ vào bằng tay lên vé giấy, đối chiếu vé khi xe ra, tự tính tiền và ghi sổ doanh thu cuối ngày. Cách làm này bộc lộ nhiều hạn chế:
+
+\begin{itemize}
+  \item \textbf{Dễ sai sót khi tính phí}: mức giá khác nhau theo loại xe và thời gian gửi, việc tính nhẩm dễ nhầm, đặc biệt với xe gửi qua đêm hoặc gửi nhiều ngày.
+  \item \textbf{Khó quản lý vé tháng}: nhân viên phải nhớ hoặc tra sổ để biết khách nào còn hạn, dẫn đến thu nhầm tiền hoặc bỏ sót thu tiền.
+  \item \textbf{Khó tra cứu}: khi cần tìm lại lịch sử một lượt gửi (xe mất vé, tranh chấp giờ vào/ra), việc lật lại sổ sách tốn nhiều thời gian và không chính xác.
+  \item \textbf{Thiếu minh bạch về doanh thu}: số liệu tổng hợp theo ngày, theo loại xe phải cộng thủ công nên chậm và khó kiểm tra.
+  \item \textbf{Rủi ro mất dữ liệu}: sổ giấy dễ rách, thất lạc và không có bản sao lưu.
+\end{itemize}
+
+Từ thực tế trên, việc xây dựng một phần mềm quản lý bãi giữ xe là cần thiết. Phần mềm giúp ghi nhận chính xác lượt xe vào và ra, tự động tính phí theo bảng giá, quản lý vé tháng, lưu trữ lịch sử tập trung và thống kê doanh thu nhanh chóng. Đây cũng là bài toán quen thuộc nhưng chứa nhiều vấn đề điển hình của một hệ thống quản lý nghiệp vụ: mô hình hóa dữ liệu, xử lý thời gian, áp dụng công thức tính phí linh hoạt và đảm bảo tính toàn vẹn dữ liệu khi thanh toán. Vì vậy nhóm lựa chọn thực hiện đề tài \textbf{``Quản lý bãi giữ xe''}.
+
+\section{Mục tiêu đề tài}
+
+\subsection{Mục tiêu chung}
+
+Xây dựng ứng dụng quản lý bãi giữ xe hỗ trợ nhân viên và người quản lý thực hiện các nghiệp vụ hằng ngày một cách chính xác, nhanh chóng và có thể truy vết, đồng thời hoàn thiện sản phẩm theo đúng cấu trúc của một dự án phần mềm (mã nguồn trên GitHub, tài liệu và báo cáo đầy đủ).
+
+\subsection{Mục tiêu cụ thể}
+
+Hệ thống cần đáp ứng các mục tiêu sau:
+
+\begin{enumerate}
+  \item \textbf{Ghi nhận xe vào và xe ra}: tạo lượt gửi khi xe vào, ghi nhận giờ ra và đóng lượt gửi khi xe ra, đồng thời ngăn các trường hợp không hợp lệ như một thẻ xe được dùng hai lần.
+  \item \textbf{Tính phí tự động theo loại xe và thời gian}: sử dụng \texttt{DateTime} để xác định thời gian gửi và \texttt{Func} để biểu diễn công thức tính phí, lấy đơn giá từ bảng giá của từng loại xe.
+  \item \textbf{Quản lý vé tháng}: đăng ký, gia hạn và kiểm tra thời hạn vé tháng; xe có vé tháng còn hạn không bị tính phí theo lượt.
+  \item \textbf{Đảm bảo toàn vẹn dữ liệu}: sử dụng \textit{transaction} khi ghi nhận xe ra và thanh toán để các thao tác cập nhật giờ ra, tính phí và lưu thanh toán hoặc cùng thành công hoặc cùng bị hủy.
+  \item \textbf{Tra cứu lịch sử lượt gửi}: tìm kiếm theo biển số, theo thẻ xe hoặc theo khoảng thời gian.
+  \item \textbf{In vé hoặc biên nhận}: in thông tin khi xe vào và khi xe ra để làm bằng chứng giao dịch.
+  \item \textbf{Hoàn thiện sản phẩm}: tổ chức mã nguồn theo cấu trúc MVP rõ ràng, có README hướng dẫn chạy, ghi nhận đóng góp của từng thành viên và hoàn thành báo cáo theo yêu cầu.
+\end{enumerate}
+
+Ngoài các chức năng chính, nhóm hướng tới một số chức năng mở rộng nếu thời gian cho phép như hiển thị số chỗ trống, lưu ảnh biển số và thống kê lượt xe theo ngày.
+
+\section{Đối tượng và phạm vi}
+
+\subsection{Đối tượng sử dụng}
+
+Hệ thống phục vụ hai nhóm người dùng:
+
+\begin{itemize}
+  \item \textbf{Nhân viên bãi xe}: trực tiếp thao tác tại cổng, thực hiện ghi nhận xe vào, xe ra, thu phí, tra cứu lượt gửi và in biên nhận.
+  \item \textbf{Người quản lý}: quản lý danh mục (loại xe, bảng giá, thẻ xe, vé tháng, khách hàng), theo dõi lịch sử và xem doanh thu.
+\end{itemize}
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{@{}lcc@{}}
+    \toprule
+    \textbf{Chức năng} & \textbf{Nhân viên} & \textbf{Quản lý} \\
+    \midrule
+    Ghi nhận xe vào/ra và thu phí & \checkmark & \checkmark \\
+    Tra cứu lịch sử lượt gửi & \checkmark & \checkmark \\
+    In vé và biên nhận & \checkmark & \checkmark \\
+    Quản lý vé tháng và khách hàng & -- & \checkmark \\
+    Quản lý loại xe, bảng giá, thẻ xe & -- & \checkmark \\
+    Xem thống kê doanh thu & -- & \checkmark \\
+    \bottomrule
+  \end{tabular}
+  \caption{Phân quyền theo vai trò người dùng}
+  \label{tab:phanquyen}
+\end{table}
+
+\subsection{Phạm vi đề tài}
+
+\paragraph{Phạm vi thực hiện.} Hệ thống quản lý một bãi giữ xe với các dữ liệu chính gồm: loại xe, thẻ xe, khách hàng, vé tháng, lượt gửi và bảng giá. Các nghiệp vụ được xây dựng bao gồm ghi nhận xe vào/ra, tính phí theo loại xe và thời gian, quản lý vé tháng, tra cứu lịch sử và in biên nhận. Ứng dụng được phát triển bằng ngôn ngữ C\# với giao diện Windows Forms (WinForms) trên nền tảng .NET, và lưu trữ dữ liệu bằng hệ quản trị cơ sở dữ liệu SQL Server.
+
+\paragraph{Ngoài phạm vi.} Để tập trung vào nghiệp vụ cốt lõi, đề tài \textit{không} thực hiện các nội dung sau: nhận diện biển số tự động bằng camera, tích hợp barie hoặc thiết bị phần cứng, thanh toán điện tử qua ví hoặc ngân hàng, và quản lý đồng thời nhiều bãi xe. Các nội dung này được nêu như hướng phát triển ở Chương~7.
+
+\section{Bố cục báo cáo}
+
+Báo cáo được chia thành bảy chương và phần phụ lục như sau:
+
+\begin{itemize}
+  \item \textbf{Chương 1 -- Mở đầu}: trình bày lý do chọn đề tài, mục tiêu, đối tượng sử dụng và phạm vi thực hiện.
+  \item \textbf{Chương 2 -- Cơ sở lý thuyết}: giới thiệu các kiến thức và công nghệ nền tảng được sử dụng như xử lý thời gian với \texttt{DateTime}, \texttt{Func}, cơ sở dữ liệu quan hệ và transaction.
+  \item \textbf{Chương 3 -- Phân tích yêu cầu}: khảo sát nghiệp vụ, xác định yêu cầu chức năng, phi chức năng và đặc tả các use case.
+  \item \textbf{Chương 4 -- Thiết kế hệ thống}: trình bày kiến trúc, sơ đồ ERD, từ điển dữ liệu, sơ đồ tuần tự và thiết kế giao diện.
+  \item \textbf{Chương 5 -- Triển khai}: mô tả quá trình cài đặt các module chính cùng mã nguồn tiêu biểu và giao diện chương trình.
+  \item \textbf{Chương 6 -- Kiểm thử và đánh giá}: trình bày các test case, kết quả kiểm thử và đánh giá sản phẩm.
+  \item \textbf{Chương 7 -- Kết luận và hướng phát triển}: tổng kết kết quả đạt được, hạn chế và hướng mở rộng.
+  \item \textbf{Phụ lục}: bảng phân công công việc, hướng dẫn cài đặt và liên kết mã nguồn.
+\end{itemize}

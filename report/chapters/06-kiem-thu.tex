@@ -1,0 +1,81 @@
+\chapter{Kiểm thử và đánh giá}
+
+% Phụ trách: ............
+
+Chương này trình bày quá trình kiểm thử hệ thống quản lý bãi giữ xe
+sau khi hoàn thành triển khai. Mục tiêu của kiểm thử là xác nhận các
+chức năng hoạt động đúng theo yêu cầu, phát hiện và xử lý các tình
+huống lỗi, đồng thời đánh giá mức độ đáp ứng của hệ thống đối với
+các yêu cầu đã đặt ra ở Chương~3.
+
+% ==================================================
+\section{Kế hoạch kiểm thử}
+% ==================================================
+
+Quá trình kiểm thử được thực hiện trên phiên bản hoàn thiện của hệ
+thống với cơ sở dữ liệu SQL Server thực tế. Việc kiểm thử tập trung
+vào các nhóm chức năng chính gồm:
+
+\begin{itemize}
+    \item Ghi nhận xe vào.
+    \item Ghi nhận xe ra và thanh toán.
+    \item Tính phí gửi xe.
+    \item Quản lý vé tháng.
+    \item Tra cứu lịch sử.
+    \item Thống kê doanh thu.
+\end{itemize}
+
+Các trường hợp kiểm thử được xây dựng dựa trên các chức năng và
+quy tắc nghiệp vụ đã phân tích ở Chương~3.
+
+Hệ thống được kiểm thử theo hai mức:
+
+\begin{itemize}
+    \item \textbf{Unit Test:} Kiểm tra các hàm xử lý nghiệp vụ riêng
+    lẻ như tính phí gửi xe.
+
+    \item \textbf{Functional Test:} Kiểm tra luồng nghiệp vụ hoàn
+    chỉnh từ giao diện tới cơ sở dữ liệu.
+\end{itemize}
+
+% ==================================================
+\section{Unit test hàm tính phí}
+% ==================================================
+
+Hàm tính phí là thành phần quan trọng của hệ thống vì ảnh hưởng
+trực tiếp đến doanh thu và tính chính xác của kết quả thanh toán.
+
+Các trường hợp kiểm thử được xây dựng nhằm kiểm tra:
+
+\begin{itemize}
+    \item Gửi xe trong thời gian ngắn.
+    \item Gửi xe nhiều giờ.
+    \item Gửi xe qua đêm.
+    \item Gửi xe nhiều ngày.
+    \item Xe có vé tháng.
+\end{itemize}
+
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{@{}clll@{}}
+        \toprule
+        \textbf{STT} &
+        \textbf{Đầu vào} &
+        \textbf{Kết quả mong đợi} &
+        \textbf{Kết quả thực tế} \\
+        \midrule
+        1 & Xe máy gửi 30 phút
+          & Tính tối thiểu 1 giờ
+          & Đạt \\
+
+        2 & Xe máy gửi 3 giờ 15 phút
+          & Làm tròn thành 4 giờ
+          & Đạt \\
+
+        3 & Ô tô gửi qua đêm
+          & Tính đúng theo thời gian thực
+          & Đạt \\
+    \end{tabular}
+\end{table}
+
+        

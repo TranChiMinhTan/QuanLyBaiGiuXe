@@ -1,0 +1,263 @@
+\chapter{Cơ sở lý thuyết}
+
+Chương này trình bày các kiến thức và công nghệ nền tảng được sử dụng để xây dựng hệ thống quản lý bãi giữ xe: nền tảng .NET Framework và ngôn ngữ C\#, thư viện Windows Forms cho giao diện, các kiểu dữ liệu xử lý thời gian, delegate \texttt{Func}, cơ sở dữ liệu quan hệ SQL Server cùng cách truy cập bằng ADO.NET, khái niệm transaction và mô hình kiến trúc phân lớp.
+
+\section{Nền tảng .NET Framework và ngôn ngữ C\#}
+
+\subsection{.NET Framework}
+
+.NET Framework là nền tảng phát triển phần mềm do Microsoft xây dựng, chạy trên hệ điều hành Windows, cung cấp môi trường thực thi và bộ thư viện dùng chung để xây dựng nhiều loại ứng dụng như ứng dụng desktop, ứng dụng web và dịch vụ~\cite{troelsen2022}. Đề tài sử dụng .NET Framework phiên bản 4.8. Nền tảng gồm hai thành phần chính:
+
+\begin{itemize}
+  \item \textbf{Common Language Runtime (CLR)}: môi trường thực thi chịu trách nhiệm nạp và chạy chương trình, quản lý bộ nhớ (thu gom rác), kiểm tra kiểu dữ liệu, xử lý ngoại lệ và bảo mật. Mã nguồn C\# được trình biên dịch chuyển thành mã trung gian (IL), sau đó CLR biên dịch tức thời (JIT) thành mã máy khi chạy.
+  \item \textbf{Framework Class Library (FCL)}: tập hợp các lớp, giao diện và kiểu dữ liệu dựng sẵn, bao gồm các kiểu cơ bản (\texttt{String}, \texttt{DateTime}), tập hợp (\texttt{List}, \texttt{Dictionary}), thao tác với tệp, truy cập cơ sở dữ liệu (ADO.NET) và xây dựng giao diện (Windows Forms).
+\end{itemize}
+
+\subsection{Ngôn ngữ C\#}
+
+C\# là ngôn ngữ lập trình hướng đối tượng, định kiểu mạnh, được thiết kế để làm việc trên nền tảng .NET. Các đặc điểm của C\# phù hợp với đề tài gồm:
+
+\begin{itemize}
+  \item Hỗ trợ đầy đủ lập trình hướng đối tượng: lớp, kế thừa, đa hình, đóng gói, giao diện (interface), thuận lợi để chia hệ thống thành các lớp nghiệp vụ rõ ràng.
+  \item Có kiểu \texttt{decimal} với độ chính xác cao, phù hợp cho các phép tính tiền tệ, tránh sai số làm tròn của kiểu \texttt{double}.
+  \item Hỗ trợ delegate, biểu thức lambda và LINQ, giúp biểu diễn công thức tính phí và truy vấn danh sách gọn gàng.
+  \item Cơ chế xử lý ngoại lệ \texttt{try-catch-finally} và câu lệnh \texttt{using} giúp quản lý tài nguyên như kết nối cơ sở dữ liệu an toàn.
+\end{itemize}
+
+\subsection{Windows Forms}
+
+Windows Forms (WinForms) là thư viện xây dựng ứng dụng giao diện đồ họa trên Windows thuộc .NET Framework. Ứng dụng WinForms hoạt động theo mô hình \textit{lập trình hướng sự kiện}: giao diện gồm các điều khiển (control) đặt trên biểu mẫu (\texttt{Form}), mỗi thao tác của người dùng như nhấn nút hay chọn một dòng sẽ phát sinh một sự kiện và được xử lý bởi phương thức tương ứng (event handler).
+
+Visual Studio cung cấp trình thiết kế kéo thả, cho phép dựng giao diện nhanh và gắn mã xử lý vào từng sự kiện.
+
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{@{}lp{9cm}@{}}
+    \toprule
+    \textbf{Điều khiển} & \textbf{Vai trò trong hệ thống} \\
+    \midrule
+    \texttt{Form} & Cửa sổ chính chứa các điều khiển khác \\
+    \texttt{TextBox}, \texttt{ComboBox} & Nhập biển số, mã thẻ; chọn loại xe \\
+    \texttt{Button} & Kích hoạt thao tác: xe vào, xe ra, tìm kiếm, in \\
+    \texttt{DataGridView} & Hiển thị danh sách lượt gửi, vé tháng, kết quả tra cứu \\
+    \texttt{DateTimePicker} & Chọn khoảng thời gian khi tra cứu hoặc thống kê \\
+    \texttt{PrintDocument} & Hỗ trợ in vé và biên nhận \\
+    \bottomrule
+  \end{tabular}
+  \caption{Các điều khiển WinForms thường dùng}
+  \label{tab:controls}
+\end{table}
+
+\section{Xử lý thời gian với DateTime và TimeSpan}
+
+Tính phí gửi xe phụ thuộc trực tiếp vào thời gian gửi nên việc xử lý thời gian chính xác là yêu cầu quan trọng. .NET Framework cung cấp hai kiểu dữ liệu chính~\cite{msdocs_datetime}:
+
+\begin{itemize}
+  \item \texttt{DateTime}: biểu diễn một thời điểm (ngày, tháng, năm, giờ, phút, giây). Thuộc tính \texttt{DateTime.Now} trả về thời điểm hiện tại theo giờ địa phương và được dùng để ghi nhận giờ xe vào và giờ xe ra.
+  \item \texttt{TimeSpan}: biểu diễn một khoảng thời gian. Khi trừ hai giá trị \texttt{DateTime} ta nhận được một \texttt{TimeSpan}, từ đó lấy tổng số giờ, số phút qua các thuộc tính \texttt{TotalHours} và \texttt{TotalMinutes}.
+\end{itemize}
+
+Đoạn mã sau minh họa cách tính thời gian gửi:
+
+\begin{lstlisting}
+DateTime gioVao = new DateTime(2026, 11, 8, 18, 30, 0);
+DateTime gioRa  = new DateTime(2026, 11, 9, 7, 45, 0);
+
+TimeSpan thoiGianGui = gioRa - gioVao;      // 13 gio 15 phut
+double tongGio = thoiGianGui.TotalHours;    // 13.25
+double gioLamTron = Math.Ceiling(tongGio);  // 14
+\end{lstlisting}
+
+Một số lưu ý khi xử lý thời gian trong bài toán bãi xe:
+
+\begin{itemize}
+  \item Nên dùng \texttt{TotalHours} hoặc \texttt{TotalMinutes} thay vì thuộc tính \texttt{Hours}, \texttt{Minutes}, vì các thuộc tính này chỉ trả về thành phần của khoảng thời gian và bỏ qua phần ngày, dẫn đến sai khi xe gửi qua đêm hoặc nhiều ngày.
+  \item Cần quy định rõ cách làm tròn (làm tròn lên theo giờ hay theo khối thời gian), thời gian miễn phí ban đầu và trường hợp giờ ra nhỏ hơn giờ vào do nhập sai.
+  \item Giờ vào và giờ ra cần được lưu trong cơ sở dữ liệu bằng kiểu \texttt{datetime} để thống nhất với \texttt{DateTime} trong C\#.
+\end{itemize}
+
+\section{Delegate Func và biểu thức lambda}
+
+\subsection{Delegate}
+
+Delegate là một kiểu tham chiếu cho phép lưu trữ và truyền một phương thức như một giá trị. Nhờ đó có thể tách phần \textit{cách tính} ra khỏi phần \textit{nơi sử dụng}, giúp mã nguồn linh hoạt và dễ thay đổi.
+
+\subsection{Func}
+
+\texttt{Func} là delegate có sẵn trong .NET Framework, đại diện cho một phương thức nhận từ 0 đến 16 tham số và trả về một giá trị~\cite{msdocs_func}. Tham số kiểu cuối cùng luôn là kiểu giá trị trả về. Ví dụ \texttt{Func<DateTime, DateTime, decimal, decimal>} là phương thức nhận giờ vào, giờ ra, đơn giá theo giờ và trả về số tiền.
+
+\subsection{Biểu thức lambda}
+
+Biểu thức lambda (toán tử \texttt{=>}) là cách viết ngắn gọn một phương thức vô danh để gán cho delegate. Ví dụ minh họa công thức tính phí theo giờ:
+
+\begin{lstlisting}
+Func<DateTime, DateTime, decimal, decimal> tinhPhiTheoGio =
+    (vao, ra, donGiaGio) =>
+    {
+        double gio = Math.Ceiling((ra - vao).TotalHours);
+        if (gio < 1) gio = 1;               // toi thieu tinh 1 gio
+        return (decimal)gio * donGiaGio;
+    };
+
+decimal phi = tinhPhiTheoGio(gioVao, gioRa, 5000m);
+\end{lstlisting}
+
+Đây chỉ là ví dụ minh họa; công thức tính phí thực tế của hệ thống được trình bày ở Chương~5. Việc dùng \texttt{Func} mang lại các lợi ích sau:
+
+\begin{itemize}
+  \item \textbf{Dễ thay đổi chính sách giá}: khi bãi xe đổi cách tính (theo giờ, theo block, theo ngày), chỉ cần thay công thức được gán vào biến \texttt{Func}, không phải sửa nơi gọi.
+  \item \textbf{Dễ kiểm thử}: công thức là một hàm thuần túy (cùng đầu vào cho cùng kết quả), thuận tiện để viết các test case độc lập.
+  \item \textbf{Hỗ trợ nhiều loại xe}: có thể lưu mỗi loại xe với một công thức riêng trong một từ điển \texttt{Dictionary<string, Func<...>>}.
+\end{itemize}
+
+\section{Cơ sở dữ liệu quan hệ và SQL Server}
+
+\subsection{Mô hình dữ liệu quan hệ}
+
+Cơ sở dữ liệu quan hệ tổ chức dữ liệu thành các \textit{bảng}, mỗi bảng gồm các dòng (bản ghi) và các cột (thuộc tính). Các khái niệm cơ bản gồm:
+
+\begin{itemize}
+  \item \textbf{Khóa chính (Primary Key)}: cột hoặc tập cột xác định duy nhất mỗi dòng trong bảng, ví dụ mã lượt gửi.
+  \item \textbf{Khóa ngoại (Foreign Key)}: cột tham chiếu đến khóa chính của bảng khác, dùng để thiết lập quan hệ, ví dụ lượt gửi tham chiếu đến thẻ xe và loại xe.
+  \item \textbf{Ràng buộc toàn vẹn}: các quy tắc như \texttt{NOT NULL}, \texttt{UNIQUE}, \texttt{CHECK}, \texttt{DEFAULT} giúp bảo đảm dữ liệu hợp lệ ngay tại cơ sở dữ liệu.
+  \item \textbf{Chuẩn hóa}: quá trình tổ chức bảng để giảm dư thừa và tránh dị thường khi thêm, sửa, xóa dữ liệu.
+\end{itemize}
+
+\subsection{SQL Server và T-SQL}
+
+Microsoft SQL Server là hệ quản trị cơ sở dữ liệu quan hệ, sử dụng ngôn ngữ T-SQL (mở rộng của SQL chuẩn). Hệ thống sử dụng các nhóm câu lệnh sau:
+
+\begin{itemize}
+  \item \textbf{DDL}: \texttt{CREATE TABLE}, \texttt{ALTER TABLE} để định nghĩa cấu trúc bảng.
+  \item \textbf{DML}: \texttt{INSERT}, \texttt{UPDATE}, \texttt{DELETE}, \texttt{SELECT} để thao tác và truy vấn dữ liệu.
+  \item \textbf{Truy vấn tổng hợp}: \texttt{SUM}, \texttt{COUNT}, \texttt{GROUP BY} để thống kê doanh thu và số lượt xe.
+  \item \textbf{Transaction}: \texttt{BEGIN TRANSACTION}, \texttt{COMMIT}, \texttt{ROLLBACK} để nhóm nhiều thao tác thành một đơn vị (trình bày ở mục~\ref{sec:transaction}).
+\end{itemize}
+
+\section{Truy cập dữ liệu bằng ADO.NET}
+
+ADO.NET là bộ thư viện trong .NET Framework dùng để kết nối và làm việc với cơ sở dữ liệu. Với SQL Server, các lớp nằm trong không gian tên \texttt{System.Data.SqlClient}. Các lớp chính được tóm tắt trong Bảng~\ref{tab:adonet}.
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{@{}lp{9cm}@{}}
+    \toprule
+    \textbf{Lớp} & \textbf{Chức năng} \\
+    \midrule
+    \texttt{SqlConnection} & Mở và đóng kết nối đến SQL Server thông qua chuỗi kết nối \\
+    \texttt{SqlCommand} & Thực thi câu lệnh SQL hoặc thủ tục lưu sẵn \\
+    \texttt{SqlParameter} & Truyền tham số vào câu lệnh một cách an toàn \\
+    \texttt{SqlDataReader} & Đọc kết quả truy vấn theo kiểu chỉ tiến, nhanh, tốn ít bộ nhớ \\
+    \texttt{SqlDataAdapter}, \texttt{DataTable} & Nạp kết quả truy vấn vào bộ nhớ để hiển thị lên \texttt{DataGridView} \\
+    \texttt{SqlTransaction} & Quản lý transaction \\
+    \bottomrule
+  \end{tabular}
+  \caption{Các lớp chính của ADO.NET dùng với SQL Server}
+  \label{tab:adonet}
+\end{table}
+
+Có hai nguyên tắc cần tuân thủ khi viết mã truy cập dữ liệu:
+
+\begin{itemize}
+  \item \textbf{Dùng truy vấn tham số hóa}: giá trị người dùng nhập phải được truyền qua \texttt{SqlParameter}, không nối chuỗi vào câu SQL, nhằm phòng tránh tấn công SQL Injection.
+  \item \textbf{Giải phóng kết nối bằng \texttt{using}}: câu lệnh \texttt{using} bảo đảm kết nối được đóng kể cả khi xảy ra lỗi.
+\end{itemize}
+
+\begin{lstlisting}
+string sql = "SELECT * FROM LuotGui WHERE BienSo = @BienSo";
+
+using (SqlConnection conn = new SqlConnection(connectionString))
+using (SqlCommand cmd = new SqlCommand(sql, conn))
+{
+    cmd.Parameters.AddWithValue("@BienSo", bienSo);
+    conn.Open();
+    using (SqlDataReader reader = cmd.ExecuteReader())
+    {
+        while (reader.Read())
+        {
+            // doc du lieu tung dong
+        }
+    }
+}
+\end{lstlisting}
+
+\section{Transaction và tính chất ACID}
+\label{sec:transaction}
+
+\subsection{Khái niệm transaction}
+
+Transaction là một nhóm các thao tác trên cơ sở dữ liệu được thực hiện như một đơn vị không thể chia nhỏ: hoặc tất cả cùng thành công (\textit{commit}), hoặc nếu có bất kỳ thao tác nào lỗi thì toàn bộ bị hủy và dữ liệu trở về trạng thái ban đầu (\textit{rollback}).
+
+\subsection{Tính chất ACID}
+
+Một transaction đáng tin cậy phải thỏa bốn tính chất, tóm tắt trong Bảng~\ref{tab:acid}.
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{@{}lp{10cm}@{}}
+    \toprule
+    \textbf{Tính chất} & \textbf{Ý nghĩa} \\
+    \midrule
+    Atomicity (nguyên tử) & Các thao tác trong transaction hoặc cùng thành công hoặc cùng bị hủy \\
+    Consistency (nhất quán) & Sau transaction, dữ liệu vẫn thỏa mọi ràng buộc của cơ sở dữ liệu \\
+    Isolation (cô lập) & Các transaction chạy đồng thời không làm ảnh hưởng sai lệch lẫn nhau \\
+    Durability (bền vững) & Dữ liệu đã commit được lưu lại, không mất khi hệ thống gặp sự cố \\
+    \bottomrule
+  \end{tabular}
+  \caption{Bốn tính chất ACID của transaction}
+  \label{tab:acid}
+\end{table}
+
+\subsection{Ứng dụng trong bài toán bãi xe}
+
+Khi xe ra, hệ thống phải thực hiện nhiều bước liên tiếp: cập nhật giờ ra cho lượt gửi, ghi số tiền phải trả, ghi nhận thanh toán và giải phóng thẻ xe. Nếu chỉ một vài bước thành công (ví dụ đã đóng lượt gửi nhưng chưa ghi thanh toán) thì doanh thu và lịch sử sẽ sai lệch. Vì vậy các bước này được đặt trong một transaction. Với ADO.NET, transaction được quản lý bằng \texttt{SqlTransaction}~\cite{msdocs_sqltransaction}:
+
+\begin{lstlisting}
+using (SqlConnection conn = new SqlConnection(connectionString))
+{
+    conn.Open();
+    using (SqlTransaction tran = conn.BeginTransaction())
+    {
+        try
+        {
+            // 1. Cap nhat gio ra va phi cho luot gui
+            var cmd1 = new SqlCommand(
+                "UPDATE LuotGui SET GioRa=@ra, Phi=@phi WHERE MaLuot=@ma",
+                conn, tran);
+            // ... them tham so, cmd1.ExecuteNonQuery();
+
+            // 2. Ghi nhan thanh toan
+            var cmd2 = new SqlCommand(
+                "INSERT INTO ThanhToan(MaLuot, SoTien, ThoiGian) VALUES(@ma,@phi,@ra)",
+                conn, tran);
+            // ... them tham so, cmd2.ExecuteNonQuery();
+
+            tran.Commit();     // tat ca thanh cong
+        }
+        catch
+        {
+            tran.Rollback();   // co loi: huy toan bo
+            throw;
+        }
+    }
+}
+\end{lstlisting}
+
+Tên bảng và cột trong đoạn mã trên chỉ mang tính minh họa; cấu trúc thực tế của hệ thống được trình bày ở Chương~4.
+
+\section{Mô hình kiến trúc phân lớp}
+
+Kiến trúc phân lớp chia ứng dụng thành các tầng, mỗi tầng đảm nhận một trách nhiệm riêng và chỉ giao tiếp với tầng liền kề. Mô hình ba lớp thường dùng với WinForms gồm:
+
+\begin{itemize}
+  \item \textbf{Lớp giao diện (GUI/Presentation)}: các \texttt{Form} của WinForms, nhận thao tác của người dùng và hiển thị kết quả. Lớp này không chứa công thức nghiệp vụ.
+  \item \textbf{Lớp nghiệp vụ (BLL -- Business Logic Layer)}: chứa các quy tắc xử lý như kiểm tra hợp lệ, tính phí, xử lý vé tháng.
+  \item \textbf{Lớp truy cập dữ liệu (DAL -- Data Access Layer)}: chứa mã ADO.NET làm việc trực tiếp với SQL Server.
+\end{itemize}
+
+Ngoài ba lớp trên, các đối tượng chuyên chở dữ liệu giữa các lớp (như \texttt{LuotGui}, \texttt{VeThang}) thường được đặt trong một nhóm lớp thực thể (Entity/DTO) dùng chung. Cách tổ chức này mang lại các lợi ích: tách biệt mối quan tâm giúp mã dễ đọc và bảo trì, có thể thay đổi giao diện hoặc cơ sở dữ liệu mà ít ảnh hưởng đến các lớp còn lại, các thành viên có thể phát triển song song từng lớp, và lớp nghiệp vụ dễ được kiểm thử độc lập.
+
+\section{Tóm tắt chương}
+
+Chương này đã trình bày các nền tảng kỹ thuật được áp dụng: .NET Framework và C\# làm môi trường phát triển, Windows Forms cho giao diện, \texttt{DateTime} và \texttt{TimeSpan} để đo thời gian gửi, \texttt{Func} để biểu diễn công thức tính phí linh hoạt, SQL Server và ADO.NET để lưu trữ và truy cập dữ liệu, transaction với tính chất ACID để bảo đảm toàn vẹn khi thanh toán, và mô hình phân lớp để tổ chức mã nguồn. Các kiến thức này là cơ sở cho phần phân tích và thiết kế ở các chương tiếp theo.

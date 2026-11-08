@@ -1,0 +1,108 @@
+\chapter{Phân công và hướng dẫn cài đặt}
+
+\section{Phân công công việc}
+
+Nhóm gồm bốn thành viên, trong đó Tân là nhóm trưởng. Bảng~\ref{tab:pc-code} trình bày phần mã nguồn mỗi thành viên phụ trách (theo các lớp DTO, DAL, BLL và View), Bảng~\ref{tab:pc-tailieu} trình bày công việc báo cáo và tài liệu.
+
+\subsection{Phân công phần mã nguồn}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{2.3cm} >{\raggedright\arraybackslash}p{7.3cm} >{\raggedright\arraybackslash}p{4.6cm}@{}}
+  \caption{Phân công phần mã nguồn}\label{tab:pc-code}\\
+  \toprule
+  \textbf{Thành viên} & \textbf{Module phụ trách} & \textbf{Công việc bổ sung} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{Thành viên} & \textbf{Module phụ trách} & \textbf{Công việc bổ sung} \\
+  \midrule
+  \endhead
+  \bottomrule
+  \endlastfoot
+  Tân (nhóm trưởng) & Cơ sở dữ liệu \texttt{Database.sql} (bảng, dữ liệu mẫu, tài khoản mẫu); lớp \texttt{Database.cs}; đăng nhập, đổi mật khẩu, phân quyền ẩn/hiện menu theo vai trò Nhân viên và Quản lý; CRUD Loại xe, Thẻ xe, Bảng giá; biểu mẫu chính \texttt{FrmMain} dạng MDI & Tạo repo GitHub, README, cấu trúc solution, hướng dẫn cài đặt và chuỗi kết nối \\[4pt]
+  Kiệt & Biểu mẫu xe vào; biểu mẫu xe ra (dạng master-detail: thông tin lượt gửi, phí, tổng tiền); hàm \texttt{Func} tính phí; transaction xe ra và thanh toán & Xây dựng tình huống rollback để trình diễn \\[4pt]
+  Hoan & CRUD Khách hàng; vé tháng (đăng ký, gia hạn, hủy, kiểm tra hạn); hàm \texttt{KiemTraVeThang}; số chỗ trống bằng stored procedure & Soạn test case và kịch bản demo \\[4pt]
+  Đăng & Tra cứu lịch sử lượt gửi; in vé và biên nhận (\texttt{PrintPreview}); báo cáo doanh thu; thống kê lượt xe theo ngày bằng GDI+; lưu ảnh biển số & Định dạng slide và file PDF \\
+\end{longtable}
+
+\subsection{Phân công báo cáo và tài liệu}
+
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{2.3cm} >{\raggedright\arraybackslash}p{12.2cm}@{}}
+  \caption{Phân công báo cáo và tài liệu}\label{tab:pc-tailieu}\\
+  \toprule
+  \textbf{Thành viên} & \textbf{Công việc phụ trách} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{Thành viên} & \textbf{Công việc phụ trách} \\
+  \midrule
+  \endhead
+  \bottomrule
+  \endlastfoot
+  Tân & Sơ đồ ERD; README; quản lý repository GitHub \\[2pt]
+  Kiệt & Soạn báo cáo bằng LaTeX; chỉnh sửa và tổng hợp mã nguồn của các thành viên \\[2pt]
+  Hoan & Soạn báo cáo bằng LaTeX; soạn test case và kịch bản demo \\[2pt]
+  Đăng & Soạn slide thuyết trình (PowerPoint); định dạng file PDF \\
+\end{longtable}
+
+\section{Hướng dẫn cài đặt và chạy chương trình}
+
+\subsection{Yêu cầu hệ thống}
+Windows, Visual Studio 2019 trở lên (có workload .NET desktop development), SQL Server (bản Express được) và SQL Server Management Studio (SSMS)
+
+\subsection{Các bước thực hiện}
+ 
+\paragraph{Bước 1. Tải mã nguồn.} Truy cập repository GitHub của nhóm (xem mục \textit{Liên kết repository} bên dưới), bấm nút \textbf{Code} rồi chọn \textbf{Download ZIP} và giải nén. Nếu máy đã cài Git, có thể dùng lệnh sau (thay đường dẫn bằng đường dẫn repository của nhóm):
+
+\begin{lstlisting}[language={},numbers=none]
+git clone https://github.com/TranChiMinhTan/QuanLyBaiGiuXe
+\end{lstlisting}
+
+ 
+\paragraph{Bước 2. Tạo cơ sở dữ liệu.}
+\begin{enumerate}
+  \item Mở SQL Server Management Studio (SSMS) và đăng nhập vào SQL Server của máy.
+  \item Chọn \textbf{File} $\rightarrow$ \textbf{Open} $\rightarrow$ \textbf{File...}, tìm và mở file \texttt{Database.sql} trong mã nguồn vừa tải.
+  \item Bấm \textbf{Execute} (hoặc phím F5) để chạy toàn bộ script. Script tạo cơ sở dữ liệu, các bảng, dữ liệu mẫu và tài khoản mẫu.
+  \item Trong khung \textbf{Object Explorer}, bấm chuột phải vào \textbf{Databases} $\rightarrow$ \textbf{Refresh}, kiểm tra đã xuất hiện cơ sở dữ liệu mới cùng các bảng. Ghi lại tên cơ sở dữ liệu này để dùng ở Bước 4.
+\end{enumerate}
+ 
+\paragraph{Bước 3. Mở solution bằng Visual Studio.} Trong thư mục mã nguồn, bấm đúp vào file solution có đuôi \texttt{.sln} (QUanLyBaiGiuXe.sln) để mở bằng Visual Studio, sau đó chờ Visual Studio nạp xong các project.
+ 
+\paragraph{Bước 4. Cập nhật chuỗi kết nối.}
+\begin{enumerate}
+  \item \textit{Xác định tên máy chủ SQL Server}: đó là nội dung ô \textbf{Server name} trong hộp thoại đăng nhập SSMS. Cũng có thể chạy câu lệnh \texttt{SELECT @@SERVERNAME} trong cửa sổ truy vấn để xem. Tên thường có dạng \texttt{TENMAY\textbackslash SQLEXPRESS} hoặc \texttt{.\textbackslash SQLEXPRESS}.
+  \item Trong \textbf{Solution Explorer} của Visual Studio, mở file \texttt{Database.cs} và tìm dòng chứa chuỗi kết nối (có từ khóa \texttt{Data Source}).
+  \item Sửa phần \texttt{Data Source} thành tên máy chủ vừa xác định, và phần \texttt{Initial Catalog} thành tên cơ sở dữ liệu đã tạo ở Bước 2.
+  \item Nếu SQL Server dùng đăng nhập bằng tài khoản Windows thì giữ \texttt{Integrated Security=True}. Nếu dùng tài khoản SQL Server thì thay bằng \texttt{User ID} và \texttt{Password}. Lưu file bằng \texttt{Ctrl+S}.
+\end{enumerate}
+ 
+Dạng chuỗi kết nối (thay phần viết hoa bằng thông tin thực tế của máy):
+ 
+\begin{lstlisting}[language={},numbers=none]
+Data Source=TEN_MAY_CHU;Initial Catalog=TEN_CSDL;Integrated Security=True
+ 
+(hoac dang nhap bang tai khoan SQL Server)
+Data Source=TEN_MAY_CHU;Initial Catalog=TEN_CSDL;User ID=TEN_TAI_KHOAN;Password=MAT_KHAU
+\end{lstlisting}
+ 
+\paragraph{Bước 5. Biên dịch và chạy.}
+\begin{enumerate}
+  \item Chọn \textbf{Build} $\rightarrow$ \textbf{Build Solution} (hoặc \texttt{Ctrl+Shift+B}) và chờ biên dịch không báo lỗi.
+  \item Bảo đảm project giao diện WinForms là project khởi động: bấm chuột phải vào project đó trong Solution Explorer và chọn \textbf{Set as Startup Project}.
+  \item Bấm \textbf{Start} (hoặc phím F5) để chạy chương trình.
+\end{enumerate}
+ 
+\paragraph{Bước 6. Đăng nhập.} Dùng tài khoản mẫu được tạo trong \texttt{Database.sql}: tài khoản Quản lý \texttt{admin} (mật khẩu \texttt{123456}) hoặc tài khoản Nhân viên \texttt{nv01} (mật khẩu \texttt{123456}). Sau khi đăng nhập, các mục menu được hiển thị theo vai trò của tài khoản.
+ 
+\subsection{Xử lý lỗi thường gặp}
+ 
+\begin{itemize}
+  \item \textbf{Lỗi kết nối: \texttt{A network-related or instance-specific error}}. Nguyên nhân thường gặp là sai tên máy chủ trong \texttt{Data Source} hoặc dịch vụ SQL Server chưa chạy. Kiểm tra lại tên máy chủ theo Bước 4 và bật dịch vụ SQL Server trong cửa sổ \textbf{Services} của Windows.
+  \item \textbf{Lỗi \texttt{Cannot open database}}. Tên trong \texttt{Initial Catalog} chưa đúng hoặc chưa chạy \texttt{Database.sql}. Kiểm tra lại Bước 2 và Bước 4.
+  \item \textbf{Lỗi \texttt{Login failed for user}}. Sai kiểu xác thực hoặc sai tài khoản SQL Server. Chuyển sang \texttt{Integrated Security=True} hoặc nhập đúng \texttt{User ID} và \texttt{Password}.
+  \item \textbf{Chạy được nhưng không đăng nhập được vào chương trình}. Kiểm tra đã dùng đúng tài khoản mẫu ở Bước 6, và dữ liệu mẫu đã được tạo khi chạy \texttt{Database.sql}.
+\end{itemize}
+ 
+
+\section{Liên kết repository}
+\url{https://github.com/TranChiMinhTan/QuanLyBaiGiuXe}

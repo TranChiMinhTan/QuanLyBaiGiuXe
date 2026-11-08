@@ -1,0 +1,101 @@
+% !TEX program = xelatex
+\documentclass[12pt,a4paper]{report}
+
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Termes}
+\defaultfontfeatures{Ligatures=TeX}
+\renewcommand{\contentsname}{Mục lục}
+\renewcommand{\listfigurename}{Danh mục hình ảnh}
+\renewcommand{\listtablename}{Danh mục bảng}
+\renewcommand{\chaptername}{Chương}
+\renewcommand{\appendixname}{Phụ lục}
+\renewcommand{\bibname}{Tài liệu tham khảo}
+\renewcommand{\figurename}{Hình}
+\renewcommand{\tablename}{Bảng}
+\usepackage[a4paper,left=3cm,right=2cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{indentfirst}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{caption}
+\captionsetup[table]{position=above,skip=6pt}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric,arrows.meta,positioning}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{amssymb}
+\usepackage{indentfirst}
+\usepackage{longtable}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric,arrows.meta,positioning}
+\usepackage{caption}
+\usepackage{graphicx}
+\captionsetup[table]{position=above,skip=6pt}
+\usepackage[hidelinks]{hyperref}
+
+\onehalfspacing
+\graphicspath{{images/}}
+
+% Cấu hình chèn code C#
+\lstset{
+  language={[Sharp]C},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  stringstyle=\color{red!60!black},
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny,
+  showstringspaces=false
+}
+
+\begin{document}
+
+% ---------- Trang bìa ----------
+\begin{titlepage}
+  \centering
+  {\large TRƯỜNG ĐẠI HỌC SƯ PHẠM THÀNH PHỐ HỒ CHÍ MINH\par}
+  {\large KHOA CÔNG NGHỆ THÔNG TIN\par}
+  \vspace{2.5cm}
+  {\huge\bfseries BÁO CÁO ĐỀ TÀI 19\\[0.5cm] QUẢN LÝ BÃI GIỮ XE\par}
+  \vspace{2cm}
+  \begin{flushleft}
+  \hspace{3cm}\textbf{GVHD:} ThS. Lê Thanh Thoại\\[0.3cm]
+  \hspace{3cm}\textbf{Nhóm:} 7\\[0.3cm]
+  \hspace{3cm}\textbf{Thành viên:}\\
+  \hspace{3.5cm}1. Trần Chí Minh Tân  -- MSSV: 51.01.104.089 (Nhóm Trưởng)\\
+  \hspace{3.5cm}2. Woòng Vĩnh Kiệt    -- MSSV: 51.01.104.053\\
+  \hspace{3.5cm}3. Nguyễn Bảo Hoan    -- MSSV: 51.01.104.030\\
+  \hspace{3.5cm}4. Nguyễn Hải Đăng    -- MSSV: 51.01.104.019\\
+  \end{flushleft}
+  \vfill
+  {\large Thành phố Hồ Chí Minh, tháng 11 năm 2026\par}
+\end{titlepage}
+
+\pagenumbering{roman}
+\tableofcontents
+\listoffigures
+\listoftables
+\clearpage
+\pagenumbering{arabic}
+
+% ---------- Nội dung ----------
+\include{chapters/01-mo-dau}
+\include{chapters/02-co-so-ly-thuyet}
+\include{chapters/03-phan-tich-yeu-cau}
+\include{chapters/04-thiet-ke-he-thong}
+\include{chapters/05-trien-khai}
+\include{chapters/06-kiem-thu}
+\include{chapters/07-ket-luan}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\appendix
+\include{chapters/phu-luc}
+
+\end{document}
