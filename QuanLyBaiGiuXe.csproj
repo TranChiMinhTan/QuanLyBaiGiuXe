@@ -33,12 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.dll</HintPath>
-    </Reference>
+    <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,16 +47,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <!-- PENDING (chưa có trong repo, xem docs/REFACTOR_LOG.md): BLL/BaoMat.cs, BLL/KiemTra.cs, BLL/NhatKyBLL.cs, BLL/PhienLamViec.cs, DAL/NhatKyDAL.cs, DAL/ThongKeDAL.cs, Models/ChoTrongDTO.cs, Models/GioCaoDiemDTO.cs, Models/GoiYVeThangDTO.cs, Models/NhatKyDTO.cs, Presenters/BangGiaPresenter.cs, Presenters/DangNhapPresenter.cs, Presenters/DoiMatKhauPresenter.cs, Presenters/KhachHangPresenter.cs, Presenters/LoaiXePresenter.cs, Presenters/NhatKyPresenter.cs, Presenters/TheXePresenter.cs, Presenters/VeThangPresenter.cs -->
+    <Compile Include="DAL\BaoCaoDAL.cs" />
+    <Compile Include="Models\BaoCaoDoanhThuDTO.cs" />
+    <Compile Include="Views\InPhieu.cs" />
     <Compile Include="BLL\BangGiaBLL.cs" />
     <Compile Include="BLL\BaoCaoBLL.cs" />
-    <Compile Include="BLL\BaoMat.cs" />
     <Compile Include="BLL\ChoTrongBLL.cs" />
     <Compile Include="BLL\KhachHangBLL.cs" />
-    <Compile Include="BLL\KiemTra.cs" />
     <Compile Include="BLL\LoaiXeBLL.cs" />
     <Compile Include="BLL\LuotGuiBLL.cs" />
-    <Compile Include="BLL\NhatKyBLL.cs" />
-    <Compile Include="BLL\PhienLamViec.cs" />
     <Compile Include="BLL\TaiKhoanBLL.cs" />
     <Compile Include="BLL\TheXeBLL.cs" />
     <Compile Include="BLL\TinhPhiBLL.cs" />
@@ -71,39 +68,25 @@
     <Compile Include="DAL\KhachHangDAL.cs" />
     <Compile Include="DAL\LoaiXeDAL.cs" />
     <Compile Include="DAL\LuotGuiDAL.cs" />
-    <Compile Include="DAL\NhatKyDAL.cs" />
     <Compile Include="DAL\TaiKhoanDAL.cs" />
     <Compile Include="DAL\TheXeDAL.cs" />
-    <Compile Include="DAL\ThongKeDAL.cs" />
     <Compile Include="DAL\TraCuuDAL.cs" />
     <Compile Include="DAL\VeThangDAL.cs" />
     <Compile Include="Models\BangGiaDTO.cs" />
     <Compile Include="Models\BienNhanDTO.cs" />
-    <Compile Include="Models\ChoTrongDTO.cs" />
     <Compile Include="Models\DoanhThuDTO.cs" />
-    <Compile Include="Models\GioCaoDiemDTO.cs" />
-    <Compile Include="Models\GoiYVeThangDTO.cs" />
     <Compile Include="Models\KetQua.cs" />
     <Compile Include="Models\KhachHangDTO.cs" />
     <Compile Include="Models\LoaiXeDTO.cs" />
     <Compile Include="Models\LuotGuiDTO.cs" />
-    <Compile Include="Models\NhatKyDTO.cs" />
     <Compile Include="Models\OGuiDTO.cs" />
     <Compile Include="Models\TaiKhoanDTO.cs" />
     <Compile Include="Models\ThanhToanDTO.cs" />
     <Compile Include="Models\TheXeDTO.cs" />
     <Compile Include="Models\VeThangDTO.cs" />
-    <Compile Include="Presenters\BangGiaPresenter.cs" />
     <Compile Include="Presenters\BaoCaoPresenter.cs" />
-    <Compile Include="Presenters\DangNhapPresenter.cs" />
-    <Compile Include="Presenters\DoiMatKhauPresenter.cs" />
-    <Compile Include="Presenters\KhachHangPresenter.cs" />
-    <Compile Include="Presenters\LoaiXePresenter.cs" />
-    <Compile Include="Presenters\NhatKyPresenter.cs" />
-    <Compile Include="Presenters\TheXePresenter.cs" />
     <Compile Include="Presenters\TraCuuPresenter.cs" />
     <Compile Include="Presenters\VanHanhPresenter.cs" />
-    <Compile Include="Presenters\VeThangPresenter.cs" />
     <Compile Include="Views\BieuDo.cs" />
     <Compile Include="Views\Frmdoimatkhau.cs">
       <SubType>Form</SubType>

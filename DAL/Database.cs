@@ -11,7 +11,7 @@ namespace QuanLyBaiGiuXe.DAL
     public static class Database
     {
         private static string ChuoiKetNoi =>
-            ConfigurationManager.ConnectionStrings["QuanLyBaiXeDB"].ConnectionString;
+            ConfigurationManager.ConnectionStrings["QuanLyBaiGiuXeDB"].ConnectionString;
 
         public static SqlConnection TaoKetNoi() => new SqlConnection(ChuoiKetNoi);
 
