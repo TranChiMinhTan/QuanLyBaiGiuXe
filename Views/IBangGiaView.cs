@@ -8,9 +8,9 @@ namespace QuanLyBaiGiuXe.Views
     {
         int MaLoaiXe { get; }
         int MienPhiPhut { get; }
-        decimal GiaKhoi { get; }
-        int SoGioKhoi { get; }
-        decimal PhuThuQuaDem { get; }
+        decimal GiaGioDau { get; }
+        decimal GiaGioTiepTheo { get; }
+        decimal GiaToiDaNgay { get; }       // trần cho mỗi khối 24 giờ
         decimal GiaVeThang { get; }
 
         void NapLoaiXe(List<LoaiXeDTO> ds);

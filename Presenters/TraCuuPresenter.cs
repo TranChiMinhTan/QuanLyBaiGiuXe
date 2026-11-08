@@ -1,11 +1,11 @@
 ﻿//Điều phối màn hình tra cứu: nhận thao tác từ View, gọi BLL, rồi bảo View hiển thị.
 using System;
 using System.Linq;
-using QuanLyBaiXe.BLL;
-using QuanLyBaiXe.Models;
-using QuanLyBaiXe.Views;
+using QuanLyBaiGiuXe.BLL;
+using QuanLyBaiGiuXe.Models;
+using QuanLyBaiGiuXe.Views;
 
-namespace QuanLyBaiXe.Presenters
+namespace QuanLyBaiGiuXe.Presenters
 {
     public class TraCuuPresenter
     {
@@ -25,10 +25,10 @@ namespace QuanLyBaiXe.Presenters
         {
             try { _view.NapLoaiXe(_bll.LayLoaiXe()); }
             catch (Exception ex) { _view.BaoLoi("Không tải được danh sách loại xe: " + ex.Message); }
-            TimKiem();
+            Tim();
         }
 
-        public void TimKiem()
+        public void Tim()
         {
             try
             {
@@ -40,9 +40,17 @@ namespace QuanLyBaiXe.Presenters
             catch (Exception ex) { _view.BaoLoi("Không tra cứu được (kiểm tra kết nối cơ sở dữ liệu): " + ex.Message); }
         }
 
-        /// <summary>View truyền vào lượt đang chọn trong bảng (interface không có thuộc tính "dòng đang chọn").</summary>
-        public void InBienNhan(LuotGuiDTO luot)
+        /// <summary>Chọn một dòng trong lưới: hiện lại ảnh biển số của lượt đó (nếu có).</summary>
+        public void Chon(LuotGuiDTO luot)
         {
+            if (luot == null) return;
+            _view.HienThiAnh(luot.DuongDanAnh);
+        }
+
+        /// <summary>In vé (xe còn trong bãi) hoặc biên nhận (xe đã ra) của lượt đang chọn trong lưới.</summary>
+        public void InBienNhan()
+        {
+            var luot = _view.LuotDangChon;
             if (luot == null)
             {
                 _view.ThongBao("Hãy chọn một lượt gửi trong bảng trước khi in.");

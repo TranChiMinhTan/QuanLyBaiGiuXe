@@ -38,7 +38,7 @@ namespace QuanLyBaiGiuXe.Presenters
                 _view.HienThiLuotGui(_bll.LayLuotHienThi());
                 _dsO = _bll.LayOGui();
                 _view.HienThiSoDo(_dsO);
-                _view.HienThiConTrong(_dsO.Count(o => o.TrangThai == "Đang trống"), _dsO.Count);
+                _view.HienThiConTrong(_dsO.Count(o => o.TrangThai == TrangThaiThe.DangTrong), _dsO.Count);
                 _view.HienThiXeTrongBai(_dsO.Count(o => o.CoXe));
             }
             catch (Exception ex) { _view.BaoLoi("Không tải được dữ liệu: " + ex.Message); }

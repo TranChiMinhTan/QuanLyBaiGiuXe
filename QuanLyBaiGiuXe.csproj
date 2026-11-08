@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -47,7 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <!-- PENDING (chưa có trong repo, xem docs/REFACTOR_LOG.md): BLL/BaoMat.cs, BLL/KiemTra.cs, BLL/NhatKyBLL.cs, BLL/PhienLamViec.cs, DAL/NhatKyDAL.cs, DAL/ThongKeDAL.cs, Models/ChoTrongDTO.cs, Models/GioCaoDiemDTO.cs, Models/GoiYVeThangDTO.cs, Models/NhatKyDTO.cs, Presenters/BangGiaPresenter.cs, Presenters/DangNhapPresenter.cs, Presenters/DoiMatKhauPresenter.cs, Presenters/KhachHangPresenter.cs, Presenters/LoaiXePresenter.cs, Presenters/NhatKyPresenter.cs, Presenters/TheXePresenter.cs, Presenters/VeThangPresenter.cs -->
     <Compile Include="DAL\BaoCaoDAL.cs" />
     <Compile Include="Models\BaoCaoDoanhThuDTO.cs" />
     <Compile Include="Views\InPhieu.cs" />
@@ -100,6 +99,25 @@
     <Compile Include="Views\FrmDangNhap.Designer.cs">
       <DependentUpon>FrmDangNhap.cs</DependentUpon>
     </Compile>
+    <Compile Include="BLL\BaoMat.cs" />
+    <Compile Include="BLL\KiemTra.cs" />
+    <Compile Include="BLL\NhatKyBLL.cs" />
+    <Compile Include="BLL\PhienLamViec.cs" />
+    <Compile Include="DAL\NhatKyDAL.cs" />
+    <Compile Include="DAL\ThongKeDAL.cs" />
+    <Compile Include="Models\ChoTrongDTO.cs" />
+    <Compile Include="Models\GioCaoDiemDTO.cs" />
+    <Compile Include="Models\GoiYVeThangDTO.cs" />
+    <Compile Include="Models\NhatKyDTO.cs" />
+    <Compile Include="Models\TrangThai.cs" />
+    <Compile Include="Presenters\BangGiaPresenter.cs" />
+    <Compile Include="Presenters\DangNhapPresenter.cs" />
+    <Compile Include="Presenters\DoiMatKhauPresenter.cs" />
+    <Compile Include="Presenters\KhachHangPresenter.cs" />
+    <Compile Include="Presenters\LoaiXePresenter.cs" />
+    <Compile Include="Presenters\NhatKyPresenter.cs" />
+    <Compile Include="Presenters\TheXePresenter.cs" />
+    <Compile Include="Presenters\VeThangPresenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\Frmgiocaodiem.cs">

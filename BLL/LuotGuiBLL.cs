@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
 using QuanLyBaiGiuXe.DAL;
 using QuanLyBaiGiuXe.Models;
 
@@ -16,8 +15,6 @@ namespace QuanLyBaiGiuXe.BLL
         private readonly LoaiXeDAL _loaiXeDal = new LoaiXeDAL();
         private readonly VeThangBLL _veThangBll = new VeThangBLL();   // của Người 3
 
-        private static readonly Regex MauBienSo = new Regex(@"^[A-Z0-9][A-Z0-9\.\- ]{3,14}$");
-
         // ---------- dữ liệu cho giao diện ----------
         public List<LoaiXeDTO> LayLoaiXe() => _loaiXeDal.LayTatCa();
         public List<LuotGuiDTO> LayLuotHienThi() => _luotDal.LayLuotHienThi();
@@ -30,7 +27,7 @@ namespace QuanLyBaiGiuXe.BLL
             maThe = (maThe ?? "").Trim().ToUpper();
 
             if (bienSo.Length == 0) return KetQua.Loi("Biển số không được để trống.");
-            if (!MauBienSo.IsMatch(bienSo)) return KetQua.Loi("Biển số không hợp lệ (ví dụ 51A-123.45).");
+            if (!KiemTra.BienSoHopLe(bienSo)) return KetQua.Loi("Biển số không hợp lệ (ví dụ 51A-123.45).");
             if (maThe.Length == 0) return KetQua.Loi("Vui lòng nhập mã thẻ.");
             if (maLoaiXe <= 0) return KetQua.Loi("Vui lòng chọn loại xe.");
 
@@ -42,8 +39,9 @@ namespace QuanLyBaiGiuXe.BLL
 
                 var the = _theDal.LayTheoMa(maThe);
                 if (the == null) return KetQua.Loi("Không tìm thấy thẻ " + maThe + ".");
-                if (the.TrangThai == "Đã mất") return KetQua.Loi("Thẻ " + maThe + " đã báo mất, không được sử dụng.");
-                if (the.TrangThai != "Đang trống") return KetQua.Loi("Thẻ " + maThe + " đang được sử dụng.");
+                if (the.TrangThai == TrangThaiThe.DaMat) return KetQua.Loi("Thẻ " + maThe + " đã báo mất, không được sử dụng.");
+                if (the.TrangThai == TrangThaiThe.Khoa) return KetQua.Loi("Thẻ " + maThe + " đang bị khóa, không được sử dụng.");
+                if (the.TrangThai != TrangThaiThe.DangTrong) return KetQua.Loi("Thẻ " + maThe + " đang được sử dụng.");
                 if (the.MaLoaiXe > 0 && the.MaLoaiXe != maLoaiXe)
                     return KetQua.Loi("Thẻ " + maThe + " dành cho loại xe " + the.TenLoaiXe + ".");
 

@@ -1,11 +1,11 @@
 ﻿//Điều phối màn hình báo cáo doanh thu: xem bảng + biểu đồ + tổng, xuất CSV.
 using System;
 using System.IO;
-using QuanLyBaiXe.BLL;
-using QuanLyBaiXe.Models;
-using QuanLyBaiXe.Views;
+using QuanLyBaiGiuXe.BLL;
+using QuanLyBaiGiuXe.Models;
+using QuanLyBaiGiuXe.Views;
 
-namespace QuanLyBaiXe.Presenters
+namespace QuanLyBaiGiuXe.Presenters
 {
     public class BaoCaoPresenter
     {
@@ -78,6 +78,30 @@ namespace QuanLyBaiXe.Presenters
             {
                 _view.BaoLoi("Không xuất được file: " + ex.Message);
             }
+        }
+
+        /// <summary>[SÁNG TẠO #8] Thống kê giờ cao điểm theo khoảng ngày đang chọn.</summary>
+        public void GioCaoDiem()
+        {
+            try { _view.HienThiGioCaoDiem(_bll.LayGioCaoDiem(_view.TuNgay, _view.DenNgay)); }
+            catch (ArgumentException ex) { _view.BaoLoi(ex.Message); }
+            catch (Exception ex) { _view.BaoLoi("Không lấy được thống kê giờ cao điểm: " + ex.Message); }
+        }
+
+        /// <summary>[SÁNG TẠO #7] Biển số gửi lẻ nhiều, nên mời đăng ký vé tháng.</summary>
+        public void GoiYVeThang()
+        {
+            try
+            {
+                var ds = _bll.LayGoiYVeThang();
+                if (ds.Count == 0)
+                {
+                    _view.ThongBao("Hiện chưa có biển số nào đủ điều kiện gợi ý đăng ký vé tháng.");
+                    return;
+                }
+                _view.HienThiGoiYVeThang(ds);
+            }
+            catch (Exception ex) { _view.BaoLoi("Không lấy được gợi ý vé tháng: " + ex.Message); }
         }
     }
 }

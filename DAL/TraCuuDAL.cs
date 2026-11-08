@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using QuanLyBaiXe.Models;
+using QuanLyBaiGiuXe.Models;
 
-namespace QuanLyBaiXe.DAL
+namespace QuanLyBaiGiuXe.DAL
 {
     public class TraCuuDAL
     {

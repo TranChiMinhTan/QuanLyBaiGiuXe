@@ -1,4 +1,5 @@
-﻿// [Người 2] Func tính phí: hàm thuần, không đụng DB hay giao diện, nên test rất dễ.
+﻿// [Người 2] Hàm tính phí: hàm thuần, không đụng DB hay giao diện nên kiểm thử rất dễ.
+// Mô hình B+ (chi tiết và bảng ví dụ: docs/MO_HINH_TINH_PHI.md).
 using System;
 using QuanLyBaiGiuXe.Models;
 
@@ -7,8 +8,11 @@ namespace QuanLyBaiGiuXe.BLL
     public static class TinhPhiBLL
     {
         /// <summary>
-        /// Quy tắc: miễn phí N phút đầu; sau đó tính theo khối giờ (làm tròn lên);
-        /// cộng phụ thu cho mỗi đêm qua ngày. Mọi số liệu đọc từ bảng giá, không hard-code.
+        /// Quy tắc:
+        ///  1. Gửi không quá MienPhiPhut phút: miễn phí.
+        ///  2. Cứ trọn 24 giờ tính GiaToiDaNgay.
+        ///  3. Phần lẻ còn lại (làm tròn LÊN theo giờ): GiaGioDau + (số giờ - 1) x GiaGioTiepTheo, nhưng không quá GiaToiDaNgay.
+        /// Mọi số liệu đọc từ bảng giá, không hard-code. Không còn phụ thu qua đêm (đã gộp vào trần mỗi 24 giờ).
         /// </summary>
         public static readonly Func<LuotGuiDTO, BangGiaDTO, decimal> TinhPhi = (luot, gia) =>
         {
@@ -16,15 +20,19 @@ namespace QuanLyBaiGiuXe.BLL
             if (ra < luot.GioVao)
                 throw new ArgumentException("Giờ ra không được trước giờ vào.");
 
-            TimeSpan thoiGian = ra - luot.GioVao;
-            if (thoiGian.TotalMinutes <= gia.MienPhiPhut) return 0m;
+            TimeSpan tg = ra - luot.GioVao;
+            if (tg.TotalMinutes <= gia.MienPhiPhut) return 0m;
 
-            int soGioKhoi = Math.Max(1, gia.SoGioKhoi);
-            int soKhoi = (int)Math.Ceiling(thoiGian.TotalHours / soGioKhoi);
-            decimal phi = soKhoi * gia.GiaKhoi;
+            long soNgayTron = tg.Ticks / TimeSpan.TicksPerDay;           // số khối 24 giờ trọn vẹn
+            long du = tg.Ticks - soNgayTron * TimeSpan.TicksPerDay;      // phần lẻ còn lại
 
-            int soDem = (ra.Date - luot.GioVao.Date).Days;      // số lần qua nửa đêm
-            phi += soDem * gia.PhuThuQuaDem;
+            decimal phi = soNgayTron * gia.GiaToiDaNgay;
+            if (du > 0)
+            {
+                long soGio = (du + TimeSpan.TicksPerHour - 1) / TimeSpan.TicksPerHour;   // làm tròn lên, tối thiểu 1
+                decimal phiLe = gia.GiaGioDau + (soGio - 1) * gia.GiaGioTiepTheo;
+                phi += Math.Min(phiLe, gia.GiaToiDaNgay);
+            }
             return phi;
         };
 

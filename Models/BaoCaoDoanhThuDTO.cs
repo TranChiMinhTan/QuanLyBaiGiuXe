@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace QuanLyBaiXe.Models
+namespace QuanLyBaiGiuXe.Models
 {
     /// <summary>Một kỳ (ngày hoặc tháng) đọc thẳng từ stored procedure sp_BaoCaoDoanhThu.</summary>
     public class DoanhThuKyDTO

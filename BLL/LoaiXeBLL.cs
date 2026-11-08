@@ -1,66 +1,81 @@
+﻿// Nghiệp vụ loại xe. Quy tắc kiểm tra lấy từ Dự án B (_Legacy/BLL/LoaiXeBLL.cs).
+// Trả về null = thành công, ngược lại là câu báo lỗi. Không dùng MessageBox.
+using System;
 using System.Collections.Generic;
-using QuanLyBaiXe.DAL;
-using QuanLyBaiXe.DTO;
+using QuanLyBaiGiuXe.DAL;
+using QuanLyBaiGiuXe.Models;
 
-namespace QuanLyBaiXe.BLL
+namespace QuanLyBaiGiuXe.BLL
 {
     public class LoaiXeBLL
     {
-        private readonly LoaiXeDAL dal = new LoaiXeDAL();
+        private readonly LoaiXeDAL _dal = new LoaiXeDAL();
+        private readonly ChoTrongDAL _choDal = new ChoTrongDAL();
 
-        public List<LoaiXeDTO> LayTatCa()
+        /// <summary>Kèm số xe đang gửi và chỗ còn trống (từ sp_SoChoTrong).</summary>
+        public List<LoaiXeDTO> LayTatCa(string tuKhoa)
         {
-            return dal.LayTatCa();
+            var ds = _dal.LayTatCa(tuKhoa);
+            var cho = new Dictionary<int, ChoTrongDTO>();
+            foreach (var c in _choDal.LayTheoLoaiXe()) cho[c.MaLoaiXe] = c;
+            foreach (var x in ds)
+            {
+                ChoTrongDTO c;
+                if (cho.TryGetValue(x.MaLoaiXe, out c)) { x.DangGui = c.DangGui; x.ConTrong = c.ConTrong; }
+                else { x.DangGui = 0; x.ConTrong = x.SucChua; }
+            }
+            return ds;
         }
 
-        private static string KiemTra(LoaiXeDTO x)
+        private static string KiemTraDuLieu(LoaiXeDTO x)
         {
-            x.TenLoaiXe = (x.TenLoaiXe ?? "").Trim();
+            x.TenLoai = (x.TenLoai ?? "").Trim();
             x.MoTa = (x.MoTa ?? "").Trim();
-
-            if (x.TenLoaiXe.Length == 0) return "Tên loại xe không được để trống.";
-            if (x.TenLoaiXe.Length > 50) return "Tên loại xe tối đa 50 ký tự.";
+            if (x.TenLoai.Length == 0) return "Tên loại xe không được để trống.";
+            if (x.TenLoai.Length > 50) return "Tên loại xe tối đa 50 ký tự.";
             if (x.MoTa.Length > 200) return "Mô tả tối đa 200 ký tự.";
             if (x.SucChua < 0) return "Sức chứa không được âm.";
             return null;
         }
 
-        public KetQua Them(LoaiXeDTO x)
+        public string Them(LoaiXeDTO x)
         {
-            return KetQua.Chay(() =>
+            string loi = KiemTraDuLieu(x);
+            if (loi != null) return loi;
+            try
             {
-                string loi = KiemTra(x);
-                if (loi != null) return KetQua.Loi(loi);
-                if (dal.TonTaiTen(x.TenLoaiXe, 0)) return KetQua.Loi("Tên loại xe đã tồn tại.");
-
-                dal.Them(x);
-                return KetQua.OK("Thêm loại xe thành công.");
-            });
+                if (_dal.TrungTen(x.TenLoai, 0)) return "Tên loại xe đã tồn tại.";
+                _dal.Them(x);
+                return null;
+            }
+            catch (Exception ex) { return Database.DichLoi(ex); }
         }
 
-        public KetQua Sua(LoaiXeDTO x)
+        public string Sua(LoaiXeDTO x)
         {
-            return KetQua.Chay(() =>
+            if (x.MaLoaiXe <= 0) return "Hãy chọn một loại xe trong danh sách để sửa.";
+            string loi = KiemTraDuLieu(x);
+            if (loi != null) return loi;
+            try
             {
-                string loi = KiemTra(x);
-                if (loi != null) return KetQua.Loi(loi);
-                if (dal.TonTaiTen(x.TenLoaiXe, x.MaLoaiXe)) return KetQua.Loi("Tên loại xe đã tồn tại.");
-
-                if (dal.Sua(x) == 0) return KetQua.Loi("Không tìm thấy loại xe cần sửa (có thể đã bị xóa).");
-                return KetQua.OK("Cập nhật loại xe thành công.");
-            });
+                if (_dal.TrungTen(x.TenLoai, x.MaLoaiXe)) return "Tên loại xe đã tồn tại.";
+                _dal.Sua(x);
+                return null;
+            }
+            catch (Exception ex) { return Database.DichLoi(ex); }
         }
 
-        public KetQua Xoa(int maLoaiXe)
+        public string Xoa(int maLoaiXe)
         {
-            return KetQua.Chay(() =>
+            if (maLoaiXe <= 0) return "Hãy chọn một loại xe trong danh sách để xóa.";
+            try
             {
-                if (dal.DangDuocSuDung(maLoaiXe))
-                    return KetQua.Loi("Loại xe đang được dùng bởi thẻ xe, bảng giá hoặc vé tháng nên không thể xóa.");
-
-                if (dal.Xoa(maLoaiXe) == 0) return KetQua.Loi("Không tìm thấy loại xe cần xóa.");
-                return KetQua.OK("Xóa loại xe thành công.");
-            });
+                if (_dal.DangDuocDung(maLoaiXe))
+                    return "Loại xe đang được dùng bởi thẻ xe, lượt gửi hoặc vé tháng nên không thể xóa.";
+                _dal.Xoa(maLoaiXe);
+                return null;
+            }
+            catch (Exception ex) { return Database.DichLoi(ex); }
         }
     }
 }

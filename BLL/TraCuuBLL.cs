@@ -1,10 +1,10 @@
 ﻿//Nghiệp vụ tra cứu. BLL không hiện MessageBox: lỗi nhập liệu ném ArgumentException cho Presenter xử lý.
 using System;
 using System.Collections.Generic;
-using QuanLyBaiXe.DAL;
-using QuanLyBaiXe.Models;
+using QuanLyBaiGiuXe.DAL;
+using QuanLyBaiGiuXe.Models;
 
-namespace QuanLyBaiXe.BLL
+namespace QuanLyBaiGiuXe.BLL
 {
     public class TraCuuBLL
     {

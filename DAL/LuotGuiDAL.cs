@@ -110,7 +110,7 @@ namespace QuanLyBaiGiuXe.DAL
                     try
                     {
                         var c1 = new SqlCommand(
-                            "UPDATE TheXe SET TrangThai = N'Đang dùng' WHERE MaThe = @the AND TrangThai = N'Đang trống'", cn, tran);
+                            "UPDATE TheXe SET TrangThai = N'" + TrangThaiThe.DangDung + "' WHERE MaThe = @the AND TrangThai = N'" + TrangThaiThe.DangTrong + "'", cn, tran);
                         c1.Parameters.AddWithValue("@the", luot.MaThe);
                         if (c1.ExecuteNonQuery() != 1)
                             throw new InvalidOperationException("Thẻ không còn ở trạng thái trống.");
@@ -166,7 +166,7 @@ namespace QuanLyBaiGiuXe.DAL
                             throw new Exception("Lỗi giả lập giữa chừng (demo rollback).");
 
                         var c3 = new SqlCommand(
-                            "UPDATE TheXe SET TrangThai = N'Đang trống' WHERE MaThe = @the", cn, tran);
+                            "UPDATE TheXe SET TrangThai = N'" + TrangThaiThe.DangTrong + "' WHERE MaThe = @the AND TrangThai = N'" + TrangThaiThe.DangDung + "'", cn, tran);
                         c3.Parameters.AddWithValue("@the", luot.MaThe);
                         c3.ExecuteNonQuery();
 

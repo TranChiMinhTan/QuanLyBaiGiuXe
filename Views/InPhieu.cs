@@ -8,9 +8,9 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Printing;
 using System.Globalization;
 using System.Windows.Forms;
-using QuanLyBaiXe.Models;
+using QuanLyBaiGiuXe.Models;
 
-namespace QuanLyBaiXe.Views
+namespace QuanLyBaiGiuXe.Views
 {
     public static class InPhieu
     {

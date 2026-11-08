@@ -1,17 +1,23 @@
 ﻿//Nghiệp vụ báo cáo doanh thu (theo ngày hoặc theo tháng) và xuất CSV.
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using QuanLyBaiXe.DAL;
-using QuanLyBaiXe.Models;
+using QuanLyBaiGiuXe.DAL;
+using QuanLyBaiGiuXe.Models;
 
-namespace QuanLyBaiXe.BLL
+namespace QuanLyBaiGiuXe.BLL
 {
     public class BaoCaoBLL
     {
         private readonly BaoCaoDAL _dal = new BaoCaoDAL();
+        private readonly ThongKeDAL _thongKeDal = new ThongKeDAL();
+
+        /// <summary>Gợi ý vé tháng: xét gửi lẻ trong 30 ngày qua, tổng phí từ 80% giá vé tháng.</summary>
+        public const int SoNgayGoiY = 30;
+        public const decimal TiLeGoiY = 0.8m;
         private static readonly CultureInfo Inv = CultureInfo.InvariantCulture;
 
         public BaoCaoDoanhThuDTO LayBaoCao(DateTime tuNgay, DateTime denNgay, bool theoThang)
@@ -80,5 +86,22 @@ namespace QuanLyBaiXe.BLL
 
             File.WriteAllText(duongDan, sb.ToString(), new UTF8Encoding(true));
         }
+
+        /// <summary>Số lượt xe vào theo từng giờ 0..23 trong khoảng ngày; luôn đủ 24 phần tử (giờ không có xe = 0).</summary>
+        public List<GioCaoDiemDTO> LayGioCaoDiem(DateTime tuNgay, DateTime denNgay)
+        {
+            if (tuNgay.Date > denNgay.Date)
+                throw new ArgumentException("Từ ngày không được lớn hơn Đến ngày.");
+            var theoGio = _thongKeDal.LaySoLuotTheoGio(tuNgay, denNgay).ToDictionary(x => x.Gio, x => x.SoLuot);
+            var kq = new List<GioCaoDiemDTO>(24);
+            for (int g = 0; g < 24; g++)
+            {
+                int n; theoGio.TryGetValue(g, out n);
+                kq.Add(new GioCaoDiemDTO { Gio = g, SoLuot = n });
+            }
+            return kq;
+        }
+
+        public List<GoiYVeThangDTO> LayGoiYVeThang() => _thongKeDal.LayGoiYVeThang(SoNgayGoiY, TiLeGoiY);
     }
 }

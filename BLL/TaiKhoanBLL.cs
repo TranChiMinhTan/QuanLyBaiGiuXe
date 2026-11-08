@@ -1,60 +1,63 @@
+﻿// Đăng nhập và đổi mật khẩu. Quy tắc lấy từ Dự án B (_Legacy/BLL/TaiKhoanBLL.cs). Trả về null = thành công, ngược lại là câu báo lỗi.
 using System;
-using QuanLyBaiXe.DAL;
-using QuanLyBaiXe.DTO;
+using QuanLyBaiGiuXe.DAL;
+using QuanLyBaiGiuXe.Models;
 
-namespace QuanLyBaiXe.BLL
+namespace QuanLyBaiGiuXe.BLL
 {
     public class TaiKhoanBLL
     {
-        private readonly TaiKhoanDAL dal = new TaiKhoanDAL();
+        private readonly TaiKhoanDAL _dal = new TaiKhoanDAL();
 
-        public KetQua DangNhap(string tenDangNhap, string matKhau, out TaiKhoanDTO taiKhoan)
+        public string DangNhap(string tenDangNhap, string matKhau, out TaiKhoanDTO taiKhoan)
         {
             taiKhoan = null;
             tenDangNhap = (tenDangNhap ?? "").Trim();
-
-            if (tenDangNhap.Length == 0) return KetQua.Loi("Vui lòng nhập tên đăng nhập.");
-            if (string.IsNullOrEmpty(matKhau)) return KetQua.Loi("Vui lòng nhập mật khẩu.");
+            if (tenDangNhap.Length == 0) return "Vui lòng nhập tên đăng nhập.";
+            if (string.IsNullOrEmpty(matKhau)) return "Vui lòng nhập mật khẩu.";
 
             try
             {
-                TaiKhoanDTO tk = dal.LayTheoTen(tenDangNhap);
-                string hash = MatKhauHelper.BamSHA256(matKhau);
+                TaiKhoanDTO tk = _dal.LayTheoTen(tenDangNhap);
+                // Một thông báo chung để không lộ tài khoản nào tồn tại / bị khóa.
+                if (tk == null || !tk.HoatDong || !BaoMat.KhopMatKhau(matKhau, tk))
+                    return "Sai tên đăng nhập hoặc mật khẩu.";
 
-                // Thông báo chung để không lộ tài khoản nào tồn tại
-                if (tk == null || !tk.KichHoat ||
-                    !string.Equals(tk.MatKhauHash, hash, StringComparison.OrdinalIgnoreCase))
+                if (!BaoMat.CoMuoi(tk))                     // nâng cấp hash cũ không muối lên PBKDF2
                 {
-                    return KetQua.Loi("Sai tên đăng nhập hoặc mật khẩu.");
+                    string muoi = BaoMat.TaoMuoi();
+                    _dal.CapNhatMatKhau(tk.Id, BaoMat.Bam(matKhau, muoi), muoi);
                 }
-
+                tk.Muoi = null; tk.MatKhauHash = null;      // không giữ thông tin băm trong bộ nhớ sau khi đăng nhập
                 taiKhoan = tk;
-                return KetQua.OK("Đăng nhập thành công.");
+                NhatKyBLL.Ghi(tk.TenDangNhap, "Đăng nhập", null);
+                return null;
             }
-            catch (Exception ex)
-            {
-                return KetQua.Loi("Không thể kết nối cơ sở dữ liệu: " + ex.Message);
-            }
+            catch (Exception ex) { return "Không thể kết nối cơ sở dữ liệu: " + ex.Message; }
         }
 
-        public KetQua DoiMatKhau(string tenDangNhap, string matKhauCu, string matKhauMoi, string xacNhan)
+        public string DoiMatKhau(string matKhauCu, string matKhauMoi, string nhapLai)
         {
-            if (string.IsNullOrEmpty(matKhauCu)) return KetQua.Loi("Vui lòng nhập mật khẩu hiện tại.");
-            if (string.IsNullOrEmpty(matKhauMoi)) return KetQua.Loi("Vui lòng nhập mật khẩu mới.");
-            if (matKhauMoi.Length < 6) return KetQua.Loi("Mật khẩu mới phải có ít nhất 6 ký tự.");
-            if (matKhauMoi == matKhauCu) return KetQua.Loi("Mật khẩu mới phải khác mật khẩu hiện tại.");
-            if (matKhauMoi != xacNhan) return KetQua.Loi("Xác nhận mật khẩu không khớp.");
+            var hienTai = PhienLamViec.TaiKhoan;
+            if (hienTai == null) return "Bạn chưa đăng nhập.";
+            if (string.IsNullOrEmpty(matKhauCu)) return "Vui lòng nhập mật khẩu hiện tại.";
+            if (string.IsNullOrEmpty(matKhauMoi)) return "Vui lòng nhập mật khẩu mới.";
+            if (matKhauMoi.Length < 6) return "Mật khẩu mới phải có ít nhất 6 ký tự.";
+            if (matKhauMoi == matKhauCu) return "Mật khẩu mới phải khác mật khẩu hiện tại.";
+            if (matKhauMoi != nhapLai) return "Xác nhận mật khẩu không khớp.";
 
-            return KetQua.Chay(() =>
+            try
             {
-                TaiKhoanDTO tk = dal.LayTheoTen(tenDangNhap);
-                if (tk == null) return KetQua.Loi("Không tìm thấy tài khoản.");
-                if (!string.Equals(tk.MatKhauHash, MatKhauHelper.BamSHA256(matKhauCu), StringComparison.OrdinalIgnoreCase))
-                    return KetQua.Loi("Mật khẩu hiện tại không đúng.");
+                TaiKhoanDTO tk = _dal.LayTheoTen(hienTai.TenDangNhap);
+                if (tk == null || !tk.HoatDong) return "Không tìm thấy tài khoản.";
+                if (!BaoMat.KhopMatKhau(matKhauCu, tk)) return "Mật khẩu hiện tại không đúng.";
 
-                dal.CapNhatMatKhau(tenDangNhap, MatKhauHelper.BamSHA256(matKhauMoi));
-                return KetQua.OK("Đổi mật khẩu thành công.");
-            });
+                string muoi = BaoMat.TaoMuoi();
+                _dal.CapNhatMatKhau(tk.Id, BaoMat.Bam(matKhauMoi, muoi), muoi);
+                NhatKyBLL.Ghi("Đổi mật khẩu");
+                return null;
+            }
+            catch (Exception ex) { return Database.DichLoi(ex); }
         }
     }
 }
