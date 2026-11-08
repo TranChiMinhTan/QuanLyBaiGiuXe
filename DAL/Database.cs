@@ -1,174 +1,84 @@
+﻿// [Người 1] Kết nối và các hàm dùng chung cho mọi DAL. Chỉ Người 1 sửa file này.
+// Cần Reference: System.Configuration. Mọi câu SQL đều phải truyền tham số qua P(...).
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace QuanLyBaiXe.DAL
+namespace QuanLyBaiGiuXe.DAL
 {
-    /// <summary>
-    /// Lớp truy cập CSDL dùng chung cho cả nhóm.
-    /// QUY ƯỚC: chỉ Người 1 sửa file này. Cần thêm hàm thì báo Người 1.
-    /// Mọi câu SQL phải dùng tham số (Database.Tham) - không nối chuỗi.
-    /// </summary>
     public static class Database
     {
-        // ---------- Kết nối ----------
-        public static string ChuoiKetNoi
+        private static string ChuoiKetNoi =>
+            ConfigurationManager.ConnectionStrings["QuanLyBaiXeDB"].ConnectionString;
+
+        public static SqlConnection TaoKetNoi() => new SqlConnection(ChuoiKetNoi);
+
+        /// <summary>Chỉ bật tạm khi demo rollback (xem LuotGuiDAL.XeRa).</summary>
+        public static bool GiaLapLoi { get; set; }
+
+        public static SqlParameter P(string ten, object giaTri) => new SqlParameter(ten, giaTri ?? DBNull.Value);
+
+        /// <summary>Đọc giá trị cột, tự xử lý NULL: r.Gt&lt;string&gt;("MoTa"), r.Gt&lt;DateTime?&gt;("GioRa").</summary>
+        public static T Gt<T>(this SqlDataReader r, string cot)
         {
-            get { return ConfigurationManager.ConnectionStrings["QuanLyBaiXe"].ConnectionString; }
+            object v = r[cot];
+            if (v == DBNull.Value) return default(T);
+            Type kieu = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
+            return (T)Convert.ChangeType(v, kieu);
         }
 
-        public static SqlConnection TaoKetNoi()
-        {
-            return new SqlConnection(ChuoiKetNoi);
-        }
+        public static List<T> Doc<T>(string sql, Func<SqlDataReader, T> map, params SqlParameter[] ps)
+            => Chay(sql, CommandType.Text, map, ps);
 
-        /// <summary>Kiểm tra kết nối. Trả về false và thông báo lỗi nếu không mở được.</summary>
-        public static bool KiemTraKetNoi(out string loi)
+        public static List<T> GoiProc<T>(string tenProc, Func<SqlDataReader, T> map, params SqlParameter[] ps)
+            => Chay(tenProc, CommandType.StoredProcedure, map, ps);
+
+        private static List<T> Chay<T>(string cauLenh, CommandType loai, Func<SqlDataReader, T> map, SqlParameter[] ps)
         {
-            try
+            var ds = new List<T>();
+            using (var cn = TaoKetNoi())
+            using (var cmd = new SqlCommand(cauLenh, cn) { CommandType = loai })
             {
-                using (SqlConnection cn = TaoKetNoi())
-                {
-                    cn.Open();
-                }
-                loi = null;
-                return true;
+                cmd.Parameters.AddRange(ps);
+                cn.Open();
+                using (var r = cmd.ExecuteReader())
+                    while (r.Read()) ds.Add(map(r));
             }
-            catch (Exception ex)
-            {
-                loi = ex.Message;
-                return false;
-            }
-        }
-
-        // ---------- Tham số ----------
-        /// <summary>Tạo SqlParameter, tự đổi null thành DBNull.</summary>
-        public static SqlParameter Tham(string ten, object giaTri)
-        {
-            return new SqlParameter(ten, giaTri ?? DBNull.Value);
-        }
-
-        // ---------- Câu lệnh thường (tự mở/đóng kết nối) ----------
-        public static DataTable LayBang(string sql, params SqlParameter[] ps)
-        {
-            return Chay(sql, false, ps, LayBangTuLenh);
+            return ds;
         }
 
         public static int ThucThi(string sql, params SqlParameter[] ps)
         {
-            return Chay(sql, false, ps, delegate (SqlCommand cmd) { return cmd.ExecuteNonQuery(); });
-        }
-
-        public static object LayGiaTri(string sql, params SqlParameter[] ps)
-        {
-            return Chay(sql, false, ps, delegate (SqlCommand cmd) { return cmd.ExecuteScalar(); });
-        }
-
-        // ---------- Stored procedure ----------
-        public static DataTable LayBangProc(string tenProc, params SqlParameter[] ps)
-        {
-            return Chay(tenProc, true, ps, LayBangTuLenh);
-        }
-
-        public static int ThucThiProc(string tenProc, params SqlParameter[] ps)
-        {
-            return Chay(tenProc, true, ps, delegate (SqlCommand cmd) { return cmd.ExecuteNonQuery(); });
-        }
-
-        public static object LayGiaTriProc(string tenProc, params SqlParameter[] ps)
-        {
-            return Chay(tenProc, true, ps, delegate (SqlCommand cmd) { return cmd.ExecuteScalar(); });
-        }
-
-        // ---------- Transaction ----------
-        /// <summary>
-        /// Chạy nhiều lệnh trong một transaction. Nếu công việc ném exception thì tự Rollback
-        /// rồi ném lại exception cho nơi gọi (dùng cho xe ra + thanh toán, đăng ký vé tháng...).
-        /// Ví dụ:
-        ///   Database.ChayTrongTransaction((cn, tr) => {
-        ///       Database.ThucThi(cn, tr, "UPDATE ...", Database.Tham("@a", 1));
-        ///       Database.ThucThi(cn, tr, "INSERT ...", Database.Tham("@b", 2));
-        ///   });
-        /// </summary>
-        public static void ChayTrongTransaction(Action<SqlConnection, SqlTransaction> congViec)
-        {
-            using (SqlConnection cn = TaoKetNoi())
+            using (var cn = TaoKetNoi())
+            using (var cmd = new SqlCommand(sql, cn))
             {
+                cmd.Parameters.AddRange(ps);
                 cn.Open();
-                using (SqlTransaction tr = cn.BeginTransaction())
-                {
-                    try
-                    {
-                        congViec(cn, tr);
-                        tr.Commit();
-                    }
-                    catch
-                    {
-                        try { tr.Rollback(); } catch { /* bỏ qua lỗi rollback */ }
-                        throw;
-                    }
-                }
-            }
-        }
-
-        // Các hàm dùng bên trong transaction (truyền kết nối và transaction đang mở)
-        public static DataTable LayBang(SqlConnection cn, SqlTransaction tr, string sql, params SqlParameter[] ps)
-        {
-            using (SqlCommand cmd = TaoLenh(cn, tr, sql, false, ps))
-            {
-                return LayBangTuLenh(cmd);
-            }
-        }
-
-        public static int ThucThi(SqlConnection cn, SqlTransaction tr, string sql, params SqlParameter[] ps)
-        {
-            using (SqlCommand cmd = TaoLenh(cn, tr, sql, false, ps))
-            {
                 return cmd.ExecuteNonQuery();
             }
         }
 
-        public static object LayGiaTri(SqlConnection cn, SqlTransaction tr, string sql, params SqlParameter[] ps)
+        public static object LayGiaTri(string sql, params SqlParameter[] ps)
         {
-            using (SqlCommand cmd = TaoLenh(cn, tr, sql, false, ps))
+            using (var cn = TaoKetNoi())
+            using (var cmd = new SqlCommand(sql, cn))
             {
+                cmd.Parameters.AddRange(ps);
+                cn.Open();
                 return cmd.ExecuteScalar();
             }
         }
 
-        // ---------- Hàm nội bộ ----------
-        private static SqlCommand TaoLenh(SqlConnection cn, SqlTransaction tr, string cauLenh, bool laProc, SqlParameter[] ps)
+        /// <summary>Đổi lỗi SQL khó hiểu thành câu thông báo cho người dùng.</summary>
+        public static string DichLoi(Exception ex)
         {
-            SqlCommand cmd = new SqlCommand(cauLenh, cn, tr);
-            cmd.CommandType = laProc ? CommandType.StoredProcedure : CommandType.Text;
-            if (ps != null && ps.Length > 0)
-            {
-                cmd.Parameters.AddRange(ps);
-            }
-            return cmd;
-        }
-
-        private static DataTable LayBangTuLenh(SqlCommand cmd)
-        {
-            DataTable dt = new DataTable();
-            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-            {
-                da.Fill(dt);
-            }
-            return dt;
-        }
-
-        private static T Chay<T>(string cauLenh, bool laProc, SqlParameter[] ps, Func<SqlCommand, T> xuLy)
-        {
-            using (SqlConnection cn = TaoKetNoi())
-            {
-                cn.Open();
-                using (SqlCommand cmd = TaoLenh(cn, null, cauLenh, laProc, ps))
-                {
-                    return xuLy(cmd);
-                }
-            }
+            var sql = ex as SqlException;
+            if (sql == null) return ex.Message;
+            if (sql.Number == 547) return "Dữ liệu đang được sử dụng ở nơi khác, không thể thực hiện thao tác này.";
+            if (sql.Number == 2627 || sql.Number == 2601) return "Dữ liệu bị trùng với bản ghi đã có.";
+            return "Lỗi cơ sở dữ liệu: " + sql.Message;
         }
     }
 }

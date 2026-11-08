@@ -1,10 +1,11 @@
+﻿// [Người 1] Đăng nhập, mở FrmMain; Đăng xuất thì quay lại màn hình đăng nhập. (Thay file Program.cs cũ.)
 using System;
 using System.Windows.Forms;
-using QuanLyBaiXe.BLL;
-using QuanLyBaiXe.DAL;
-using QuanLyBaiXe.GUI;
+using QuanLyBaiGiuXe.BLL;
+using QuanLyBaiGiuXe.Models;
+using QuanLyBaiGiuXe.Views;
 
-namespace QuanLyBaiXe
+namespace QuanLyBaiGiuXe
 {
     internal static class Program
     {
@@ -14,29 +15,20 @@ namespace QuanLyBaiXe
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            string loi;
-            if (!Database.KiemTraKetNoi(out loi))
-            {
-                MessageBox.Show(
-                    "Không kết nối được cơ sở dữ liệu.\n\n" + loi +
-                    "\n\nHãy kiểm tra SQL Server đã chạy, đã chạy Scripts/Database.sql và chuỗi kết nối trong App.config.",
-                    "Lỗi kết nối", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            // Vòng lặp để hỗ trợ "Đăng xuất" -> quay lại màn hình đăng nhập
             while (true)
             {
-                PhienDangNhap.NguoiDung = null;
-
-                using (FrmDangNhap dangNhap = new FrmDangNhap())
+                TaiKhoanDTO tk;
+                using (var dangNhap = new FrmDangNhap())
                 {
                     if (dangNhap.ShowDialog() != DialogResult.OK) return;
+                    tk = dangNhap.TaiKhoanDangNhap;
                 }
+                PhienLamViec.TaiKhoan = tk;
 
-                FrmMain main = new FrmMain();
+                var main = new FrmMain(tk);
                 Application.Run(main);
                 if (!main.DangXuat) return;
+                PhienLamViec.TaiKhoan = null;
             }
         }
     }
