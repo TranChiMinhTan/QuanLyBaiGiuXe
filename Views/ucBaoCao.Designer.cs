@@ -1,4 +1,4 @@
-﻿﻿namespace QuanLyBaiGiuXe.Views
+﻿namespace QuanLyBaiGiuXe.Views
 {
     partial class ucBaoCao
     {
@@ -29,18 +29,19 @@
         private void InitializeComponent()
         {
             this.grbBaoCaoDoanhThu = new System.Windows.Forms.GroupBox();
-            this.lblTuNgay = new System.Windows.Forms.Label();
-            this.lblDenNgay = new System.Windows.Forms.Label();
-            this.dtpTuNgay = new System.Windows.Forms.DateTimePicker();
-            this.dtpDenNgay = new System.Windows.Forms.DateTimePicker();
-            this.rdoTheoNgay = new System.Windows.Forms.RadioButton();
-            this.rdoTheoThang = new System.Windows.Forms.RadioButton();
-            this.btnXem = new System.Windows.Forms.Button();
             this.btnXuatCsv = new System.Windows.Forms.Button();
+            this.btnXem = new System.Windows.Forms.Button();
+            this.rdoTheoThang = new System.Windows.Forms.RadioButton();
+            this.rdoTheoNgay = new System.Windows.Forms.RadioButton();
+            this.dtpDenNgay = new System.Windows.Forms.DateTimePicker();
+            this.dtpTuNgay = new System.Windows.Forms.DateTimePicker();
+            this.lblDenNgay = new System.Windows.Forms.Label();
+            this.lblTuNgay = new System.Windows.Forms.Label();
             this.dgvBaoCao = new System.Windows.Forms.DataGridView();
             this.pnlDuoi = new System.Windows.Forms.Panel();
             this.lblTong = new System.Windows.Forms.Label();
             this.pnlBieuDo = new System.Windows.Forms.Panel();
+            this.btnGioCaoDiem = new System.Windows.Forms.Button();
             this.grbBaoCaoDoanhThu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBaoCao)).BeginInit();
             this.pnlDuoi.SuspendLayout();
@@ -48,6 +49,7 @@
             // 
             // grbBaoCaoDoanhThu
             // 
+            this.grbBaoCaoDoanhThu.Controls.Add(this.btnGioCaoDiem);
             this.grbBaoCaoDoanhThu.Controls.Add(this.btnXuatCsv);
             this.grbBaoCaoDoanhThu.Controls.Add(this.btnXem);
             this.grbBaoCaoDoanhThu.Controls.Add(this.rdoTheoThang);
@@ -64,50 +66,25 @@
             this.grbBaoCaoDoanhThu.TabStop = false;
             this.grbBaoCaoDoanhThu.Text = "Bộ lọc";
             // 
-            // lblTuNgay
+            // btnXuatCsv
             // 
-            this.lblTuNgay.AutoSize = true;
-            this.lblTuNgay.Location = new System.Drawing.Point(23, 33);
-            this.lblTuNgay.Name = "lblTuNgay";
-            this.lblTuNgay.Size = new System.Drawing.Size(76, 22);
-            this.lblTuNgay.TabIndex = 0;
-            this.lblTuNgay.Text = "Từ ngày";
+            this.btnXuatCsv.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnXuatCsv.Location = new System.Drawing.Point(881, 51);
+            this.btnXuatCsv.Name = "btnXuatCsv";
+            this.btnXuatCsv.Size = new System.Drawing.Size(112, 44);
+            this.btnXuatCsv.TabIndex = 7;
+            this.btnXuatCsv.Text = "Xuất CSV";
+            this.btnXuatCsv.UseVisualStyleBackColor = false;
             // 
-            // lblDenNgay
+            // btnXem
             // 
-            this.lblDenNgay.AutoSize = true;
-            this.lblDenNgay.Location = new System.Drawing.Point(217, 33);
-            this.lblDenNgay.Name = "lblDenNgay";
-            this.lblDenNgay.Size = new System.Drawing.Size(87, 22);
-            this.lblDenNgay.TabIndex = 1;
-            this.lblDenNgay.Text = "Đến ngày";
-            // 
-            // dtpTuNgay
-            // 
-            this.dtpTuNgay.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpTuNgay.Location = new System.Drawing.Point(27, 59);
-            this.dtpTuNgay.Name = "dtpTuNgay";
-            this.dtpTuNgay.Size = new System.Drawing.Size(156, 28);
-            this.dtpTuNgay.TabIndex = 2;
-            // 
-            // dtpDenNgay
-            // 
-            this.dtpDenNgay.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpDenNgay.Location = new System.Drawing.Point(221, 59);
-            this.dtpDenNgay.Name = "dtpDenNgay";
-            this.dtpDenNgay.Size = new System.Drawing.Size(156, 28);
-            this.dtpDenNgay.TabIndex = 3;
-            // 
-            // rdoTheoNgay
-            // 
-            this.rdoTheoNgay.AutoSize = true;
-            this.rdoTheoNgay.Location = new System.Drawing.Point(415, 60);
-            this.rdoTheoNgay.Name = "rdoTheoNgay";
-            this.rdoTheoNgay.Size = new System.Drawing.Size(117, 26);
-            this.rdoTheoNgay.TabIndex = 4;
-            this.rdoTheoNgay.TabStop = true;
-            this.rdoTheoNgay.Text = "Theo ngày";
-            this.rdoTheoNgay.UseVisualStyleBackColor = true;
+            this.btnXem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btnXem.Location = new System.Drawing.Point(731, 51);
+            this.btnXem.Name = "btnXem";
+            this.btnXem.Size = new System.Drawing.Size(112, 44);
+            this.btnXem.TabIndex = 6;
+            this.btnXem.Text = "Xem";
+            this.btnXem.UseVisualStyleBackColor = false;
             // 
             // rdoTheoThang
             // 
@@ -120,23 +97,50 @@
             this.rdoTheoThang.Text = "Theo tháng";
             this.rdoTheoThang.UseVisualStyleBackColor = true;
             // 
-            // btnXem
+            // rdoTheoNgay
             // 
-            this.btnXem.Location = new System.Drawing.Point(731, 51);
-            this.btnXem.Name = "btnXem";
-            this.btnXem.Size = new System.Drawing.Size(112, 44);
-            this.btnXem.TabIndex = 6;
-            this.btnXem.Text = "Xem";
-            this.btnXem.UseVisualStyleBackColor = true;
+            this.rdoTheoNgay.AutoSize = true;
+            this.rdoTheoNgay.Location = new System.Drawing.Point(415, 60);
+            this.rdoTheoNgay.Name = "rdoTheoNgay";
+            this.rdoTheoNgay.Size = new System.Drawing.Size(117, 26);
+            this.rdoTheoNgay.TabIndex = 4;
+            this.rdoTheoNgay.TabStop = true;
+            this.rdoTheoNgay.Text = "Theo ngày";
+            this.rdoTheoNgay.UseVisualStyleBackColor = true;
             // 
-            // btnXuatCsv
+            // dtpDenNgay
             // 
-            this.btnXuatCsv.Location = new System.Drawing.Point(881, 51);
-            this.btnXuatCsv.Name = "btnXuatCsv";
-            this.btnXuatCsv.Size = new System.Drawing.Size(112, 44);
-            this.btnXuatCsv.TabIndex = 7;
-            this.btnXuatCsv.Text = "Xuất CSV";
-            this.btnXuatCsv.UseVisualStyleBackColor = true;
+            this.dtpDenNgay.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpDenNgay.Location = new System.Drawing.Point(221, 59);
+            this.dtpDenNgay.Name = "dtpDenNgay";
+            this.dtpDenNgay.Size = new System.Drawing.Size(156, 28);
+            this.dtpDenNgay.TabIndex = 3;
+            // 
+            // dtpTuNgay
+            // 
+            this.dtpTuNgay.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpTuNgay.Location = new System.Drawing.Point(27, 59);
+            this.dtpTuNgay.Name = "dtpTuNgay";
+            this.dtpTuNgay.Size = new System.Drawing.Size(156, 28);
+            this.dtpTuNgay.TabIndex = 2;
+            // 
+            // lblDenNgay
+            // 
+            this.lblDenNgay.AutoSize = true;
+            this.lblDenNgay.Location = new System.Drawing.Point(217, 33);
+            this.lblDenNgay.Name = "lblDenNgay";
+            this.lblDenNgay.Size = new System.Drawing.Size(87, 22);
+            this.lblDenNgay.TabIndex = 1;
+            this.lblDenNgay.Text = "Đến ngày";
+            // 
+            // lblTuNgay
+            // 
+            this.lblTuNgay.AutoSize = true;
+            this.lblTuNgay.Location = new System.Drawing.Point(23, 33);
+            this.lblTuNgay.Name = "lblTuNgay";
+            this.lblTuNgay.Size = new System.Drawing.Size(76, 22);
+            this.lblTuNgay.TabIndex = 0;
+            this.lblTuNgay.Text = "Từ ngày";
             // 
             // dgvBaoCao
             // 
@@ -170,12 +174,21 @@
             // 
             // pnlBieuDo
             // 
-            this.pnlBieuDo.BackColor = System.Drawing.Color.White;
             this.pnlBieuDo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlBieuDo.Location = new System.Drawing.Point(434, 124);
             this.pnlBieuDo.Name = "pnlBieuDo";
             this.pnlBieuDo.Size = new System.Drawing.Size(866, 531);
             this.pnlBieuDo.TabIndex = 3;
+            // 
+            // btnGioCaoDiem
+            // 
+            this.btnGioCaoDiem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnGioCaoDiem.Location = new System.Drawing.Point(1015, 51);
+            this.btnGioCaoDiem.Name = "btnGioCaoDiem";
+            this.btnGioCaoDiem.Size = new System.Drawing.Size(140, 44);
+            this.btnGioCaoDiem.TabIndex = 8;
+            this.btnGioCaoDiem.Text = "Giờ cao điểm";
+            this.btnGioCaoDiem.UseVisualStyleBackColor = false;
             // 
             // ucBaoCao
             // 
@@ -187,7 +200,7 @@
             this.Controls.Add(this.pnlDuoi);
             this.Controls.Add(this.grbBaoCaoDoanhThu);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "ucBaoCao";
             this.Size = new System.Drawing.Size(1300, 700);
             this.grbBaoCaoDoanhThu.ResumeLayout(false);
@@ -214,5 +227,6 @@
         private System.Windows.Forms.Panel pnlDuoi;
         private System.Windows.Forms.Label lblTong;
         private System.Windows.Forms.Panel pnlBieuDo;
+        private System.Windows.Forms.Button btnGioCaoDiem;
     }
 }

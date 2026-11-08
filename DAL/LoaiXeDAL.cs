@@ -1,84 +1,48 @@
-using System;
+﻿// [Người 1] Bảng LoaiXe.
 using System.Collections.Generic;
-using System.Data;
-using QuanLyBaiXe.DTO;
+using QuanLyBaiGiuXe.Models;
+using static QuanLyBaiGiuXe.DAL.Database;
 
-namespace QuanLyBaiXe.DAL
+namespace QuanLyBaiGiuXe.DAL
 {
     public class LoaiXeDAL
     {
-        private static LoaiXeDTO Doc(DataRow r)
+        private static LoaiXeDTO Map(System.Data.SqlClient.SqlDataReader r) => new LoaiXeDTO
         {
-            return new LoaiXeDTO
-            {
-                MaLoaiXe = Convert.ToInt32(r["MaLoaiXe"]),
-                TenLoaiXe = r["TenLoaiXe"].ToString(),
-                MoTa = r["MoTa"] == DBNull.Value ? "" : r["MoTa"].ToString(),
-                SucChua = Convert.ToInt32(r["SucChua"])
-            };
+            MaLoaiXe = r.Gt<int>("MaLoaiXe"),
+            TenLoai = r.Gt<string>("TenLoai"),
+            SucChua = r.Gt<int>("SucChua"),
+            MoTa = r.Gt<string>("MoTa")
+        };
+
+        public List<LoaiXeDTO> LayTatCa(string tuKhoa = null)
+        {
+            string k = string.IsNullOrWhiteSpace(tuKhoa) ? null : tuKhoa.Trim();
+            return Doc<LoaiXeDTO>(
+                "SELECT MaLoaiXe, TenLoai, SucChua, MoTa FROM LoaiXe " +
+                "WHERE (@k IS NULL OR TenLoai LIKE N'%' + @k + N'%') ORDER BY MaLoaiXe", Map, P("@k", k));
         }
 
-        public List<LoaiXeDTO> LayTatCa()
-        {
-            DataTable dt = Database.LayBang(
-                "SELECT MaLoaiXe, TenLoaiXe, MoTa, SucChua FROM LoaiXe ORDER BY MaLoaiXe");
-            List<LoaiXeDTO> ds = new List<LoaiXeDTO>();
-            foreach (DataRow r in dt.Rows) ds.Add(Doc(r));
-            return ds;
-        }
+        public bool TrungTen(string ten, int boQuaMa)
+            => (int)LayGiaTri("SELECT COUNT(*) FROM LoaiXe WHERE TenLoai = @t AND MaLoaiXe <> @id",
+                              P("@t", ten), P("@id", boQuaMa)) > 0;
 
-        public LoaiXeDTO LayTheoMa(int maLoaiXe)
-        {
-            DataTable dt = Database.LayBang(
-                "SELECT MaLoaiXe, TenLoaiXe, MoTa, SucChua FROM LoaiXe WHERE MaLoaiXe = @ma",
-                Database.Tham("@ma", maLoaiXe));
-            return dt.Rows.Count == 0 ? null : Doc(dt.Rows[0]);
-        }
+        public void Them(LoaiXeDTO x)
+            => ThucThi("INSERT INTO LoaiXe(TenLoai, SucChua, MoTa) VALUES(@t, @s, @m)",
+                       P("@t", x.TenLoai), P("@s", x.SucChua), P("@m", x.MoTa));
 
-        public int Them(LoaiXeDTO x)
-        {
-            return Database.ThucThi(
-                "INSERT INTO LoaiXe (TenLoaiXe, MoTa, SucChua) VALUES (@ten, @mota, @suc)",
-                Database.Tham("@ten", x.TenLoaiXe),
-                Database.Tham("@mota", string.IsNullOrEmpty(x.MoTa) ? null : x.MoTa),
-                Database.Tham("@suc", x.SucChua));
-        }
+        public void Sua(LoaiXeDTO x)
+            => ThucThi("UPDATE LoaiXe SET TenLoai = @t, SucChua = @s, MoTa = @m WHERE MaLoaiXe = @id",
+                       P("@t", x.TenLoai), P("@s", x.SucChua), P("@m", x.MoTa), P("@id", x.MaLoaiXe));
 
-        public int Sua(LoaiXeDTO x)
-        {
-            return Database.ThucThi(
-                "UPDATE LoaiXe SET TenLoaiXe = @ten, MoTa = @mota, SucChua = @suc WHERE MaLoaiXe = @ma",
-                Database.Tham("@ten", x.TenLoaiXe),
-                Database.Tham("@mota", string.IsNullOrEmpty(x.MoTa) ? null : x.MoTa),
-                Database.Tham("@suc", x.SucChua),
-                Database.Tham("@ma", x.MaLoaiXe));
-        }
+        /// <summary>Loại xe đã có thẻ, lượt gửi hoặc vé tháng thì không được xóa.</summary>
+        public bool DangDuocDung(int ma)
+            => (int)LayGiaTri(
+                "SELECT (SELECT COUNT(*) FROM TheXe WHERE MaLoaiXe = @id) + (SELECT COUNT(*) FROM LuotGui WHERE MaLoaiXe = @id) " +
+                "+ (SELECT COUNT(*) FROM VeThang WHERE MaLoaiXe = @id)", P("@id", ma)) > 0;
 
-        public int Xoa(int maLoaiXe)
-        {
-            return Database.ThucThi("DELETE FROM LoaiXe WHERE MaLoaiXe = @ma",
-                Database.Tham("@ma", maLoaiXe));
-        }
-
-        /// <summary>Kiểm tra trùng tên (bỏ qua chính bản ghi có mã boQuaMa; truyền 0 khi thêm mới).</summary>
-        public bool TonTaiTen(string ten, int boQuaMa)
-        {
-            object kq = Database.LayGiaTri(
-                "SELECT COUNT(*) FROM LoaiXe WHERE TenLoaiXe = @ten AND MaLoaiXe <> @ma",
-                Database.Tham("@ten", ten),
-                Database.Tham("@ma", boQuaMa));
-            return Convert.ToInt32(kq) > 0;
-        }
-
-        /// <summary>Loại xe đã được thẻ xe, bảng giá hoặc vé tháng tham chiếu thì không được xóa.</summary>
-        public bool DangDuocSuDung(int maLoaiXe)
-        {
-            object kq = Database.LayGiaTri(
-                "SELECT (SELECT COUNT(*) FROM TheXe   WHERE MaLoaiXe = @ma) " +
-                "     + (SELECT COUNT(*) FROM BangGia WHERE MaLoaiXe = @ma) " +
-                "     + (SELECT COUNT(*) FROM VeThang WHERE MaLoaiXe = @ma)",
-                Database.Tham("@ma", maLoaiXe));
-            return Convert.ToInt32(kq) > 0;
-        }
+        public void Xoa(int ma)
+            => ThucThi("SET XACT_ABORT ON; BEGIN TRAN; DELETE FROM BangGia WHERE MaLoaiXe = @id; " +
+                       "DELETE FROM LoaiXe WHERE MaLoaiXe = @id; COMMIT;", P("@id", ma));
     }
 }

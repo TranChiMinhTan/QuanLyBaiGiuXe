@@ -1,90 +1,50 @@
-using System;
+﻿// [Người 1] Bảng TheXe. LayTheoMa được Người 2 gọi khi xe vào.
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
-using QuanLyBaiXe.DTO;
+using System.Linq;
+using QuanLyBaiGiuXe.Models;
+using static QuanLyBaiGiuXe.DAL.Database;
 
-namespace QuanLyBaiXe.DAL
+namespace QuanLyBaiGiuXe.DAL
 {
     public class TheXeDAL
     {
-        private const string SqlChon =
-            "SELECT t.MaThe, t.MaLoaiXe, l.TenLoaiXe, t.TrangThai " +
-            "FROM TheXe t JOIN LoaiXe l ON l.MaLoaiXe = t.MaLoaiXe ";
+        private const string Chon =
+            "SELECT t.MaThe, t.MaLoaiXe, lx.TenLoai, t.TrangThai, t.NgayCap, " +
+            "  (SELECT TOP 1 l.BienSo FROM LuotGui l WHERE l.MaThe = t.MaThe AND l.GioRa IS NULL) AS BienSoDangGui " +
+            "FROM TheXe t JOIN LoaiXe lx ON lx.MaLoaiXe = t.MaLoaiXe ";
 
-        private static TheXeDTO Doc(DataRow r)
+        private static TheXeDTO Map(SqlDataReader r) => new TheXeDTO
         {
-            return new TheXeDTO
-            {
-                MaThe = r["MaThe"].ToString(),
-                MaLoaiXe = Convert.ToInt32(r["MaLoaiXe"]),
-                TenLoaiXe = r["TenLoaiXe"].ToString(),
-                TrangThai = r["TrangThai"].ToString()
-            };
-        }
+            MaThe = r.Gt<string>("MaThe"),
+            MaLoaiXe = r.Gt<int>("MaLoaiXe"),
+            TenLoaiXe = r.Gt<string>("TenLoai"),
+            TrangThai = r.Gt<string>("TrangThai"),
+            NgayCap = r.Gt<System.DateTime>("NgayCap"),
+            BienSoDangGui = r.Gt<string>("BienSoDangGui")
+        };
 
-        public List<TheXeDTO> LayTatCa()
-        {
-            DataTable dt = Database.LayBang(SqlChon + "ORDER BY t.MaThe");
-            List<TheXeDTO> ds = new List<TheXeDTO>();
-            foreach (DataRow r in dt.Rows) ds.Add(Doc(r));
-            return ds;
-        }
-
-        /// <summary>Người 2 dùng khi xe vào/ra để lấy thẻ.</summary>
         public TheXeDTO LayTheoMa(string maThe)
+            => Doc<TheXeDTO>(Chon + "WHERE t.MaThe = @the", Map, P("@the", maThe)).FirstOrDefault();
+
+        public List<TheXeDTO> LayTatCa(string tuKhoa)
         {
-            DataTable dt = Database.LayBang(SqlChon + "WHERE t.MaThe = @ma",
-                Database.Tham("@ma", maThe));
-            return dt.Rows.Count == 0 ? null : Doc(dt.Rows[0]);
+            string k = string.IsNullOrWhiteSpace(tuKhoa) ? null : tuKhoa.Trim();
+            return Doc<TheXeDTO>(Chon + "WHERE (@k IS NULL OR t.MaThe LIKE N'%' + @k + N'%' OR lx.TenLoai LIKE N'%' + @k + N'%' " +
+                                 "OR t.TrangThai LIKE N'%' + @k + N'%') ORDER BY t.MaThe", Map, P("@k", k));
         }
 
-        public bool TonTai(string maThe)
-        {
-            object kq = Database.LayGiaTri("SELECT COUNT(*) FROM TheXe WHERE MaThe = @ma",
-                Database.Tham("@ma", maThe));
-            return Convert.ToInt32(kq) > 0;
-        }
+        public void Them(TheXeDTO t)
+            => ThucThi("INSERT INTO TheXe(MaThe, MaLoaiXe, TrangThai, NgayCap) VALUES(@m, @lx, @tt, @nc)",
+                       P("@m", t.MaThe), P("@lx", t.MaLoaiXe), P("@tt", t.TrangThai), P("@nc", t.NgayCap));
 
-        public int Them(TheXeDTO t)
-        {
-            return Database.ThucThi(
-                "INSERT INTO TheXe (MaThe, MaLoaiXe, TrangThai) VALUES (@ma, @loai, @tt)",
-                Database.Tham("@ma", t.MaThe),
-                Database.Tham("@loai", t.MaLoaiXe),
-                Database.Tham("@tt", t.TrangThai));
-        }
+        public void Sua(TheXeDTO t)
+            => ThucThi("UPDATE TheXe SET MaLoaiXe = @lx, TrangThai = @tt, NgayCap = @nc WHERE MaThe = @m",
+                       P("@m", t.MaThe), P("@lx", t.MaLoaiXe), P("@tt", t.TrangThai), P("@nc", t.NgayCap));
 
-        public int Sua(TheXeDTO t)
-        {
-            return Database.ThucThi(
-                "UPDATE TheXe SET MaLoaiXe = @loai, TrangThai = @tt WHERE MaThe = @ma",
-                Database.Tham("@loai", t.MaLoaiXe),
-                Database.Tham("@tt", t.TrangThai),
-                Database.Tham("@ma", t.MaThe));
-        }
+        public bool CoLuotGui(string maThe)
+            => (int)LayGiaTri("SELECT COUNT(*) FROM LuotGui WHERE MaThe = @m", P("@m", maThe)) > 0;
 
-        public int Xoa(string maThe)
-        {
-            return Database.ThucThi("DELETE FROM TheXe WHERE MaThe = @ma",
-                Database.Tham("@ma", maThe));
-        }
-
-        /// <summary>Thẻ đã từng có lượt gửi thì không được xóa (chỉ khóa).</summary>
-        public bool DaCoLuotGui(string maThe)
-        {
-            object kq = Database.LayGiaTri("SELECT COUNT(*) FROM LuotGui WHERE MaThe = @ma",
-                Database.Tham("@ma", maThe));
-            return Convert.ToInt32(kq) > 0;
-        }
-
-        /// <summary>Đổi trạng thái thẻ bên trong transaction (Người 2 gọi khi xe vào/ra).</summary>
-        public int CapNhatTrangThai(SqlConnection cn, SqlTransaction tr, string maThe, string trangThai)
-        {
-            return Database.ThucThi(cn, tr,
-                "UPDATE TheXe SET TrangThai = @tt WHERE MaThe = @ma",
-                Database.Tham("@tt", trangThai),
-                Database.Tham("@ma", maThe));
-        }
+        public void Xoa(string maThe) => ThucThi("DELETE FROM TheXe WHERE MaThe = @m", P("@m", maThe));
     }
 }
