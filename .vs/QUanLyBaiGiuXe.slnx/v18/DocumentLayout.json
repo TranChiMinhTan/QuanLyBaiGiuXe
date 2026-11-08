@@ -3,11 +3,7 @@
   "WorkspaceRootPath": "C:\\VINHKIET\\Nh\u00F3m 7 - QuanLyBaiGiuXe\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{87A03224-C977-4811-96AC-CA3334DB9B18}|QuanLyBaiGiuXe.csproj|c:\\vinhkiet\\nh\u00F3m 7 - quanlybaigiuxe\\presenters\\vethangpresenter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{87A03224-C977-4811-96AC-CA3334DB9B18}|QuanLyBaiGiuXe.csproj|solutionrelative:presenters\\vethangpresenter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{87A03224-C977-4811-96AC-CA3334DB9B18}|QuanLyBaiGiuXe.csproj|c:\\vinhkiet\\nh\u00F3m 7 - quanlybaigiuxe\\dal\\banggiadal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{87A03224-C977-4811-96AC-CA3334DB9B18}|QuanLyBaiGiuXe.csproj|C:\\VINHKIET\\Nh\u00F3m 7 - QuanLyBaiGiuXe\\dal\\banggiadal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{87A03224-C977-4811-96AC-CA3334DB9B18}|QuanLyBaiGiuXe.csproj|solutionrelative:dal\\banggiadal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -17,12 +13,12 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedHeight": 140,
-          "SelectedChildIndex": 1,
+          "DockedHeight": 438,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "BangGiaDAL.cs",
               "DocumentMoniker": "C:\\VINHKIET\\Nh\u00F3m 7 - QuanLyBaiGiuXe\\DAL\\BangGiaDAL.cs",
               "RelativeDocumentMoniker": "DAL\\BangGiaDAL.cs",
@@ -32,20 +28,13 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-11-08T17:26:12.559Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "VeThangPresenter.cs",
-              "DocumentMoniker": "C:\\VINHKIET\\Nh\u00F3m 7 - QuanLyBaiGiuXe\\Presenters\\VeThangPresenter.cs",
-              "RelativeDocumentMoniker": "Presenters\\VeThangPresenter.cs",
-              "ToolTip": "C:\\VINHKIET\\Nh\u00F3m 7 - QuanLyBaiGiuXe\\Presenters\\VeThangPresenter.cs",
-              "RelativeToolTip": "Presenters\\VeThangPresenter.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAADAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-08T17:24:41.959Z",
-              "EditorCaption": ""
-            },
+            }
+          ]
+        },
+        {
+          "DockedHeight": 160,
+          "SelectedChildIndex": -1,
+          "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"

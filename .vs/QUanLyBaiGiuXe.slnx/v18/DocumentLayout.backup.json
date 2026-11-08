@@ -1,22 +1,10 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\VINHKIET\\test1\\",
+  "WorkspaceRootPath": "C:\\VINHKIET\\Nh\u00F3m 7 - QuanLyBaiGiuXe\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{87A03224-C977-4811-96AC-CA3334DB9B18}|QuanLyBaiGiuXe.csproj|c:\\vinhkiet\\test1\\dal\\vethangdal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{87A03224-C977-4811-96AC-CA3334DB9B18}|QuanLyBaiGiuXe.csproj|solutionrelative:dal\\vethangdal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{87A03224-C977-4811-96AC-CA3334DB9B18}|QuanLyBaiGiuXe.csproj|C:\\VINHKIET\\test1\\dal\\thongkedal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{87A03224-C977-4811-96AC-CA3334DB9B18}|QuanLyBaiGiuXe.csproj|solutionrelative:dal\\thongkedal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{87A03224-C977-4811-96AC-CA3334DB9B18}|QuanLyBaiGiuXe.csproj|C:\\VINHKIET\\test1\\views\\frmdangnhap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{87A03224-C977-4811-96AC-CA3334DB9B18}|QuanLyBaiGiuXe.csproj|solutionrelative:views\\frmdangnhap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{87A03224-C977-4811-96AC-CA3334DB9B18}|QuanLyBaiGiuXe.csproj|C:\\VINHKIET\\test1\\dal\\database.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{87A03224-C977-4811-96AC-CA3334DB9B18}|QuanLyBaiGiuXe.csproj|solutionrelative:dal\\database.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{87A03224-C977-4811-96AC-CA3334DB9B18}|QuanLyBaiGiuXe.csproj|C:\\VINHKIET\\Nh\u00F3m 7 - QuanLyBaiGiuXe\\dal\\banggiadal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{87A03224-C977-4811-96AC-CA3334DB9B18}|QuanLyBaiGiuXe.csproj|solutionrelative:dal\\banggiadal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -25,61 +13,26 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedHeight": 572,
+          "DockedHeight": 438,
           "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "VeThangDAL.cs",
-              "DocumentMoniker": "C:\\VINHKIET\\test1\\DAL\\VeThangDAL.cs",
-              "RelativeDocumentMoniker": "DAL\\VeThangDAL.cs",
-              "ToolTip": "C:\\VINHKIET\\test1\\DAL\\VeThangDAL.cs",
-              "RelativeToolTip": "DAL\\VeThangDAL.cs",
-              "ViewState": "AgIAAEIAAAAAAAAAAAAmwEUAAAAiAAAAAAAAAA==",
+              "Title": "BangGiaDAL.cs",
+              "DocumentMoniker": "C:\\VINHKIET\\Nh\u00F3m 7 - QuanLyBaiGiuXe\\DAL\\BangGiaDAL.cs",
+              "RelativeDocumentMoniker": "DAL\\BangGiaDAL.cs",
+              "ToolTip": "C:\\VINHKIET\\Nh\u00F3m 7 - QuanLyBaiGiuXe\\DAL\\BangGiaDAL.cs",
+              "RelativeToolTip": "DAL\\BangGiaDAL.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-08T16:37:52.279Z",
+              "WhenOpened": "2026-11-08T17:26:12.559Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ThongKeDAL.cs",
-              "DocumentMoniker": "C:\\VINHKIET\\test1\\DAL\\ThongKeDAL.cs",
-              "RelativeDocumentMoniker": "DAL\\ThongKeDAL.cs",
-              "ToolTip": "C:\\VINHKIET\\test1\\DAL\\ThongKeDAL.cs",
-              "RelativeToolTip": "DAL\\ThongKeDAL.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAABcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-08T16:19:50.089Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Database.cs",
-              "DocumentMoniker": "C:\\VINHKIET\\test1\\DAL\\Database.cs",
-              "RelativeDocumentMoniker": "DAL\\Database.cs",
-              "ToolTip": "C:\\VINHKIET\\test1\\DAL\\Database.cs",
-              "RelativeToolTip": "DAL\\Database.cs",
-              "ViewState": "AgIAADkAAAAAAAAAAAAIwAsAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-08T13:25:07.637Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "FrmDangNhap.cs [Design]",
-              "DocumentMoniker": "C:\\VINHKIET\\test1\\Views\\FrmDangNhap.cs",
-              "RelativeDocumentMoniker": "Views\\FrmDangNhap.cs",
-              "ToolTip": "C:\\VINHKIET\\test1\\Views\\FrmDangNhap.cs [Design]",
-              "RelativeToolTip": "Views\\FrmDangNhap.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-08T13:24:02.442Z"
             }
           ]
         },
         {
-          "DockedHeight": 26,
+          "DockedHeight": 160,
           "SelectedChildIndex": -1,
           "Children": [
             {
@@ -93,7 +46,7 @@
           ]
         },
         {
-          "DockedHeight": 228,
+          "DockedHeight": 114,
           "SelectedChildIndex": -1,
           "Children": [
             {

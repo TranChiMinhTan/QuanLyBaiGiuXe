@@ -17,3 +17,22 @@ C:\VINHKIET\test1\obj\Debug\QuanLyBaiGiuXe.csproj.GenerateResource.cache
 C:\VINHKIET\test1\obj\Debug\QuanLyBaiGiuXe.csproj.CoreCompileInputs.cache
 C:\VINHKIET\test1\obj\Debug\QuanLyBaiGiuXe.exe
 C:\VINHKIET\test1\obj\Debug\QuanLyBaiGiuXe.pdb
+C:\VINHKIET\Nhóm 7 - QuanLyBaiGiuXe\bin\Debug\QuanLyBaiGiuXe.exe.config
+C:\VINHKIET\Nhóm 7 - QuanLyBaiGiuXe\bin\Debug\QuanLyBaiGiuXe.exe
+C:\VINHKIET\Nhóm 7 - QuanLyBaiGiuXe\bin\Debug\QuanLyBaiGiuXe.pdb
+C:\VINHKIET\Nhóm 7 - QuanLyBaiGiuXe\obj\Debug\QuanLyBaiGiuXe.csproj.AssemblyReference.cache
+C:\VINHKIET\Nhóm 7 - QuanLyBaiGiuXe\obj\Debug\QuanLyBaiGiuXe.Properties.Resources.resources
+C:\VINHKIET\Nhóm 7 - QuanLyBaiGiuXe\obj\Debug\QuanLyBaiGiuXe.Views.FrmDangNhap.resources
+C:\VINHKIET\Nhóm 7 - QuanLyBaiGiuXe\obj\Debug\QuanLyBaiGiuXe.Views.FrmMain.resources
+C:\VINHKIET\Nhóm 7 - QuanLyBaiGiuXe\obj\Debug\QuanLyBaiGiuXe.Views.ucBangGia.resources
+C:\VINHKIET\Nhóm 7 - QuanLyBaiGiuXe\obj\Debug\QuanLyBaiGiuXe.Views.ucBaoCao.resources
+C:\VINHKIET\Nhóm 7 - QuanLyBaiGiuXe\obj\Debug\QuanLyBaiGiuXe.Views.ucKhachHang.resources
+C:\VINHKIET\Nhóm 7 - QuanLyBaiGiuXe\obj\Debug\QuanLyBaiGiuXe.Views.ucLoaiXe.resources
+C:\VINHKIET\Nhóm 7 - QuanLyBaiGiuXe\obj\Debug\QuanLyBaiGiuXe.Views.ucTheXe.resources
+C:\VINHKIET\Nhóm 7 - QuanLyBaiGiuXe\obj\Debug\QuanLyBaiGiuXe.Views.ucTraCuu.resources
+C:\VINHKIET\Nhóm 7 - QuanLyBaiGiuXe\obj\Debug\QuanLyBaiGiuXe.Views.ucVanHanh.resources
+C:\VINHKIET\Nhóm 7 - QuanLyBaiGiuXe\obj\Debug\QuanLyBaiGiuXe.Views.ucVeThang.resources
+C:\VINHKIET\Nhóm 7 - QuanLyBaiGiuXe\obj\Debug\QuanLyBaiGiuXe.csproj.GenerateResource.cache
+C:\VINHKIET\Nhóm 7 - QuanLyBaiGiuXe\obj\Debug\QuanLyBaiGiuXe.csproj.CoreCompileInputs.cache
+C:\VINHKIET\Nhóm 7 - QuanLyBaiGiuXe\obj\Debug\QuanLyBaiGiuXe.exe
+C:\VINHKIET\Nhóm 7 - QuanLyBaiGiuXe\obj\Debug\QuanLyBaiGiuXe.pdb
